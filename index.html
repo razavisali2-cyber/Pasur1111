@@ -1,0 +1,2944 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>پاسور ۱۱ | چهار برگ</title>
+<!-- تنظیمات PWA: قابل نصب روی گوشی و اجرای کاملاً آفلاین -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#125c43">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="پاسور ۱۱">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --felt-dark:#0a3626;
+  --felt:#125c43;
+  --felt-light:#1c7a58;
+  --gold:#d9b24c;
+  --gold-deep:#a97e22;
+  --cream:#f6efdc;
+  --ink:#211b12;
+  --red:#b2372a;
+  --black:#1c1712;
+  --panel:rgba(8,32,24,.86);
+  --panel-light:rgba(246,239,220,.06);
+  --radius:16px;
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px);
+  --safe-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none;}
+html,body{height:100%; margin:0; overscroll-behavior:none;}
+body{
+  font-family:'Vazirmatn','IRANSans','Tahoma','Segoe UI',sans-serif;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.06), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, var(--felt) 0%, var(--felt-dark) 70%, #041d15 100%);
+  color:var(--cream);
+  height:100dvh;
+  height:var(--tg-vh, 100dvh);
+  overflow:hidden;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 2px, transparent 2px 6px);
+  pointer-events:none;
+  opacity:.5;
+}
+.screen{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  padding:calc(14px + var(--safe-t)) calc(14px + var(--safe-r)) calc(14px + var(--safe-b)) calc(14px + var(--safe-l));
+  opacity:1; transition:opacity .35s ease, transform .35s ease;
+}
+.screen.hidden{ opacity:0; pointer-events:none; transform:scale(.98); }
+.scroll{ overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+/* ---------- Ornamental bits ---------- */
+.medallion{
+  width:120px; height:120px; margin:0 auto 6px;
+  border-radius:50%;
+  background:
+    conic-gradient(from 0deg, var(--gold) 0 10deg, transparent 10deg 45deg,
+      var(--gold) 45deg 55deg, transparent 55deg 90deg,
+      var(--gold) 90deg 100deg, transparent 100deg 135deg,
+      var(--gold) 135deg 145deg, transparent 145deg 180deg,
+      var(--gold) 180deg 190deg, transparent 190deg 225deg,
+      var(--gold) 225deg 235deg, transparent 235deg 270deg,
+      var(--gold) 270deg 280deg, transparent 280deg 315deg,
+      var(--gold) 315deg 325deg, transparent 325deg 360deg);
+  box-shadow:0 0 26px rgba(217,178,76,.35), inset 0 0 0 2px rgba(217,178,76,.5);
+  animation:spin 22s linear infinite;
+  position:relative;
+}
+.medallion::after{
+  content:"۱۱"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:34px; font-weight:800; color:var(--gold); text-shadow:0 2px 6px rgba(0,0,0,.5);
+  animation:spin-rev 22s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+@keyframes spin-rev{ to{ transform:rotate(-360deg); } }
+
+.title-fa{ text-align:center; font-size:clamp(22px,6vw,34px); font-weight:800; letter-spacing:.5px; color:var(--cream); margin:2px 0 0; text-shadow:0 2px 10px rgba(0,0,0,.4);}
+.subtitle-fa{ text-align:center; font-size:clamp(11px,3vw,14px); color:var(--gold); opacity:.85; margin:2px 0 14px; letter-spacing:1px;}
+
+.divider{ height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); margin:10px 0; opacity:.5;}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:flex; align-items:center; gap:10px;
+  background:linear-gradient(180deg, rgba(246,239,220,.08), rgba(246,239,220,.02));
+  border:1px solid rgba(217,178,76,.45);
+  color:var(--cream);
+  border-radius:14px;
+  padding:14px 16px;
+  font-size:clamp(14px,3.6vw,17px);
+  font-weight:700;
+  font-family:inherit;
+  cursor:pointer;
+  transition:transform .12s ease, background .12s ease, box-shadow .12s ease;
+  box-shadow:0 3px 0 rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.03);
+}
+.btn:active{ transform:translateY(2px) scale(.98); box-shadow:0 1px 0 rgba(0,0,0,.25);}
+.btn .ic{ font-size:1.3em; color:var(--gold); flex:0 0 auto;}
+.btn.primary{ background:linear-gradient(180deg, var(--gold), var(--gold-deep)); color:#241a05; border-color:var(--gold-deep); }
+.btn.primary .ic{ color:#241a05;}
+.btn.ghost{ background:transparent; border-style:dashed; opacity:.85;}
+.btn:disabled{ opacity:.35; filter:grayscale(.4); pointer-events:none;}
+.btn.small{ padding:8px 12px; font-size:13px; border-radius:10px;}
+.btn.danger{ border-color:#c0473a;}
+
+.menu-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; }
+.profile-widget{
+  display:flex; align-items:center; gap:10px; width:100%;
+  background:var(--panel-light); border:1px solid rgba(217,178,76,.25);
+  border-radius:14px; padding:8px 12px; cursor:pointer; color:var(--cream);
+  font-family:inherit; text-align:right;
+}
+.profile-avatar{
+  width:42px; height:42px; border-radius:50%; flex:0 0 auto;
+  background:linear-gradient(160deg, var(--felt-light), var(--felt-dark));
+  border:2px solid var(--gold); display:flex; align-items:center; justify-content:center;
+  font-size:20px; overflow:hidden; background-size:cover; background-position:center;
+}
+.profile-texts{ flex:1; overflow:hidden; }
+.profile-name{ font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.profile-username{ font-size:11px; opacity:.65; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.profile-arrow{ font-size:20px; opacity:.5; transform:scaleX(-1); }
+.menu-grid .btn{ flex-direction:column; text-align:center; padding:16px 8px; gap:6px;}
+.menu-grid .btn .ic{ font-size:26px;}
+.menu-grid .btn small{ font-weight:400; opacity:.7; font-size:11px;}
+
+/* ---------- Panels / cards of UI ---------- */
+.panel{
+  background:var(--panel);
+  border:1px solid rgba(217,178,76,.3);
+  border-radius:var(--radius);
+  padding:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.section-title{ color:var(--gold); font-weight:800; font-size:15px; margin:16px 0 8px; display:flex; align-items:center; gap:6px;}
+.section-title:first-child{ margin-top:0;}
+p, li{ line-height:2; font-size:14px; color:var(--cream); opacity:.92;}
+h1,h2,h3{ color:var(--gold);}
+
+/* settings rows */
+.field{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 4px; border-bottom:1px dashed rgba(217,178,76,.18);}
+.field:last-child{ border-bottom:none;}
+.field label{ font-size:13.5px; flex:1;}
+.field input[type=text], .field input[type=number], .field select{
+  background:rgba(0,0,0,.25); border:1px solid rgba(217,178,76,.4); color:var(--cream);
+  border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13.5px; width:130px; text-align:center;
+}
+.switch{ position:relative; width:46px; height:26px; flex:0 0 auto;}
+.switch input{ opacity:0; width:0; height:0;}
+.switch .track{ position:absolute; inset:0; background:rgba(255,255,255,.15); border-radius:20px; transition:.2s; border:1px solid rgba(217,178,76,.3);}
+.switch .track::after{ content:""; position:absolute; width:20px; height:20px; border-radius:50%; background:var(--cream); top:2px; right:2px; transition:.2s;}
+.switch input:checked + .track{ background:var(--gold-deep);}
+.switch input:checked + .track::after{ transform:translateX(-20px); background:#241a05;}
+
+/* ---------- Game board ---------- */
+#screen-game{ padding:calc(6px + var(--safe-t)) calc(6px + var(--safe-r)) calc(6px + var(--safe-b)) calc(6px + var(--safe-l)); }
+.board{ flex:1; display:flex; flex-direction:column; min-height:0; }
+.hud{ display:flex; align-items:center; justify-content:space-between; padding:4px 6px; font-size:12px;}
+.hud .who{ display:flex; align-items:center; gap:6px; background:rgba(0,0,0,.25); padding:5px 10px; border-radius:20px; border:1px solid rgba(217,178,76,.25);}
+.hud .who .dot{ width:7px; height:7px; border-radius:50%; background:#5a5a5a;}
+.hud .who.active .dot{ background:#59d98a; box-shadow:0 0 6px #59d98a;}
+.hud .mid{ text-align:center; font-size:11px; opacity:.75;}
+
+.table-wrap{ flex:1; display:flex; align-items:center; justify-content:center; position:relative; min-height:0;}
+.table-oval{
+  width:100%; height:100%; max-height:100%;
+  border-radius:50% / 40%;
+  background:
+    radial-gradient(ellipse at 50% 40%, var(--felt-light), var(--felt) 65%, var(--felt-dark) 100%);
+  border:6px solid rgba(217,178,76,.35);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.4);
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px; padding:10px;
+  position:relative;
+}
+.table-empty-hint{ color:rgba(246,239,220,.4); font-size:12px; position:absolute;}
+
+.deckpile{ position:absolute; top:8px; left:8px; display:flex; flex-direction:column; align-items:center; gap:2px; z-index:3;}
+.deckpile .count{ font-size:10px; background:rgba(0,0,0,.4); padding:2px 8px; border-radius:10px;}
+
+.hand-row{ display:flex; justify-content:center; align-items:flex-end; gap:0; padding:6px 0 2px; min-height:var(--cardH); position:relative; overflow-x:auto; overflow-y:visible; scrollbar-width:none;}
+.hand-row::-webkit-scrollbar{ display:none; }
+/* دست بازیکن با کارت‌های بزرگ‌تر نمایش داده می‌شود */
+#player-hand{ min-height:var(--cardH-player); }
+#player-hand .card{ width:var(--cardW-player); height:var(--cardH-player); border-radius:calc(var(--cardW-player)*.14); margin-inline-start:4px; }
+#player-hand .card:first-child{ margin-inline-start:0; }
+#player-hand .card .corner{ font-size:calc(var(--cardW-player)*.22); }
+#player-hand .card .center{ font-size:calc(var(--cardW-player)*.5); }
+#player-hand .card.face .center{ font-size:calc(var(--cardW-player)*.32); }
+#player-hand .card.selected{ transform:translateY(calc(var(--cardH-player) * -0.22)); }
+.piles-row{ display:flex; justify-content:space-between; align-items:center; padding:2px 6px; font-size:11px; opacity:.85;}
+.pile-badge{ display:flex; align-items:center; gap:5px; background:rgba(0,0,0,.22); padding:4px 9px; border-radius:12px;}
+
+/* card */
+/* اندازهٔ کارت‌ها: هم بر اساس عرض صفحه (vw) و هم ارتفاع (vh) محدود می‌شود تا در گوشی‌های
+   افقی/کوتاه هم کارت از صفحه بیرون نزند و در همه‌ی گوشی‌ها واضح و بزرگ دیده شود */
+:root{
+  --cardW:clamp(52px, min(15vw, 11vh), 78px);
+  --cardH:calc(var(--cardW) * 1.3959);
+  /* کارت‌های دست بازیکن کمی بزرگ‌تر از بقیه هستند تا راحت‌تر دیده و لمس شوند */
+  --cardW-player:clamp(64px, min(19vw, 14vh), 98px);
+  --cardH-player:calc(var(--cardW-player) * 1.3959);
+}
+.card{
+  width:var(--cardW); height:var(--cardH); border-radius:calc(var(--cardW)*.14);
+  background:linear-gradient(160deg,#fffdf7,var(--cream));
+  border:1px solid rgba(0,0,0,.15);
+  box-shadow:0 2px 5px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.5) inset;
+  position:relative; flex:0 0 auto; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:space-between; padding:4px 5px;
+  font-weight:800; color:var(--black);
+  transition:transform .18s ease, box-shadow .18s ease, margin .18s ease;
+  margin-inline-start:3px;
+}
+.card:first-child{ margin-inline-start:0;}
+/* اگر تصویر واقعی کارت از پوشه‌ی cards/ با موفقیت بارگذاری شود، روی طرح متنی پیش‌فرض قرار می‌گیرد
+   و آن را می‌پوشاند؛ اگر فایل تصویر پیدا نشود، با onerror حذف می‌شود و طرح قبلی همان‌طور که بود دیده می‌شود */
+.card-face-img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:contain; background:var(--cream);
+  border-radius:inherit; z-index:2; pointer-events:none;
+}
+.card.red{ color:var(--red);}
+.card .corner{ font-size:calc(var(--cardW)*.22); line-height:1; display:flex; flex-direction:column; align-items:center;}
+.card .corner.br{ align-self:flex-end; transform:rotate(180deg);}
+.card .center{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:calc(var(--cardW)*.5); opacity:.92;}
+.card.face .center{ font-size:calc(var(--cardW)*.32); border:2px solid currentColor; border-radius:8px; width:62%; height:70%; margin:auto; display:flex; align-items:center; justify-content:center; opacity:.85;}
+.card.back{ background:
+    conic-gradient(from 45deg, var(--felt) 0 25%, var(--felt-light) 0 50%, var(--felt) 0 75%, var(--felt-light) 0 100%);
+  border:2px solid var(--gold-deep);
+  position:relative;
+}
+.card.back::after{ content:"✶"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:calc(var(--cardW)*.5); opacity:.8;}
+/* طرح دلخواه پشت کارت که کاربر از گالری خودش انتخاب می‌کند */
+:root{ --custom-back-image:none; --custom-back-size:100%; --custom-back-pos:50% 50%; }
+body.custom-back .card.back{
+  background-image:var(--custom-back-image);
+  background-size:var(--custom-back-size);
+  background-position:var(--custom-back-pos);
+  background-repeat:no-repeat;
+  background-color:var(--felt);
+}
+body.custom-back .card.back::after{ display:none; }
+
+/* طرح دلخواه روی کارت‌ها (پشت‌زمینه یکسان روی همه‌ی کارت‌های رو-باز) */
+:root{ --custom-front-image:none; --custom-front-size:100%; --custom-front-pos:50% 50%; }
+body.custom-front .card:not(.back){
+  background-image:var(--custom-front-image);
+  background-size:var(--custom-front-size);
+  background-position:var(--custom-front-pos);
+  background-repeat:no-repeat;
+  background-color:var(--cream);
+}
+/* برای خوانا ماندن عدد/خال روی تصویر دلخواه، پشت متن‌ها کمی روشن می‌شود */
+body.custom-front .card:not(.back) .corner{ background:rgba(255,255,255,.78); border-radius:5px; padding:0 3px; }
+body.custom-front .card:not(.back) .center{ background:rgba(255,255,255,.5); border-radius:8px; }
+
+.hand-row .card{ cursor:pointer;}
+.hand-row .card.selected{ transform:translateY(calc(var(--cardH) * -0.22)); box-shadow:0 8px 16px rgba(0,0,0,.5), 0 0 0 3px var(--gold);}
+.table-oval .card{ margin-inline-start:2px; cursor:pointer;}
+.table-oval .card.selected{ transform:translateY(-8px); box-shadow:0 8px 16px rgba(0,0,0,.5), 0 0 0 3px var(--gold);}
+.table-oval .card.hint{ box-shadow:0 0 0 2px rgba(217,178,76,.55);}
+
+.bot-hand .card{ background:linear-gradient(160deg,#fffdf7,var(--cream));}
+
+.action-bar{ display:flex; gap:8px; padding:6px 2px calc(4px + var(--safe-b)); align-items:stretch;}
+.action-bar .btn{ flex:1; justify-content:center; padding:11px;}
+/* دکمه کوچک خروج به منو با لوگوی مدال‌یون به‌جای دکمه بزرگ قبلی */
+.btn-icon-exit{
+  flex:0 0 auto; width:44px; height:44px; border-radius:50%;
+  background:linear-gradient(180deg, rgba(246,239,220,.1), rgba(246,239,220,.02));
+  border:1px solid rgba(217,178,76,.45); color:var(--gold);
+  display:flex; align-items:center; justify-content:center; font-size:19px; cursor:pointer;
+  box-shadow:0 3px 0 rgba(0,0,0,.25);
+}
+.btn-icon-exit:active{ transform:translateY(2px); box-shadow:none;}
+
+/* دکمه شناور ریست اضطراری بازی - همیشه قابل کلیک است حتی اگر بازی هنگ کرده باشد */
+.reset-fab{
+  position:absolute; z-index:15; top:calc(6px + var(--safe-t)); left:calc(6px + var(--safe-l));
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(8,32,24,.75); border:1px solid rgba(217,178,76,.4); color:var(--gold);
+  display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer;
+}
+.reset-fab:active{ transform:scale(.92);}
+
+.toast{
+  position:absolute; top:14%; left:50%; transform:translateX(-50%) translateY(-10px); z-index:20;
+  background:linear-gradient(180deg, var(--gold), var(--gold-deep)); color:#241a05; font-weight:800;
+  padding:10px 22px; border-radius:30px; box-shadow:0 8px 20px rgba(0,0,0,.45);
+  opacity:0; transition:opacity .25s ease, transform .25s ease; pointer-events:none; font-size:14px; white-space:nowrap;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* modal */
+.modal-bg{ position:absolute; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:30; padding:20px;}
+.modal-bg.hidden{ display:none;}
+.modal{ background:var(--felt-dark); border:1px solid var(--gold); border-radius:18px; padding:20px; max-width:380px; width:100%; max-height:82vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,.6);}
+.modal h2{ text-align:center; margin-top:0;}
+.score-row{ display:flex; justify-content:space-between; padding:6px 2px; font-size:13.5px; border-bottom:1px dashed rgba(217,178,76,.2);}
+.score-row b{ color:var(--gold);}
+.collected-grid{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+.collected-grid .card{ margin-inline-start:0 !important; }
+.modal-actions{ display:flex; gap:8px; margin-top:14px;}
+
+/* flying card during animation */
+.flying{
+  position:fixed; z-index:80; pointer-events:none;
+  transition:left .48s cubic-bezier(.22,.78,.24,1), top .48s cubic-bezier(.22,.78,.24,1),
+             width .48s cubic-bezier(.22,.78,.24,1), height .48s cubic-bezier(.22,.78,.24,1),
+             opacity .48s ease, transform .48s cubic-bezier(.22,.78,.24,1);
+  will-change:left, top, width, height, opacity, transform;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));
+}
+.flying .card{ width:100%; height:100%; margin:0; }
+.flying.spin{ transform:rotate(360deg); }
+/* هنگام پرواز، کارت اصلی مقصد موقتاً پنهان می‌شود تا با کپی در حال پرواز تداخل نداشته باشد */
+.anim-hidden{ visibility:hidden; }
+@keyframes cardPulse{ 0%{transform:scale(1);} 45%{transform:scale(1.12);} 100%{transform:scale(1);} }
+.card.capture-pulse{ animation:cardPulse .3s ease; }
+@keyframes dealIn{ from{ opacity:0; transform:translateY(14px) scale(.85);} to{ opacity:1; transform:translateY(0) scale(1);} }
+.card.deal-in{ animation:dealIn .32s cubic-bezier(.22,.9,.3,1) both; }
+
+::-webkit-scrollbar{ width:6px;}
+::-webkit-scrollbar-thumb{ background:rgba(217,178,76,.4); border-radius:4px;}
+
+@media (max-width:360px){ .menu-grid{ gap:8px;} }
+@media (min-width:640px){
+  .menu-grid{ grid-template-columns:1fr 1fr 1fr;}
+  .modal{ max-width:460px;}
+}
+/* گوشی در حالت افقی یا صفحه‌های خیلی کوتاه: کارت‌ها کوچک‌تر می‌شوند تا همه چیز جا شود */
+@media (max-height:420px){
+  :root{
+    --cardW:clamp(38px, min(10vw, 8vh), 56px);
+    --cardW-player:clamp(46px, min(12vw, 9.5vh), 64px);
+  }
+  .hud{ font-size:10px; padding:2px 4px;}
+  .piles-row{ font-size:9px; padding:0 4px;}
+  .action-bar .btn{ padding:7px;}
+}
+/* تبلت و صفحه‌های خیلی بزرگ: از کشیده‌شدن بیش‌ازحد میز جلوگیری می‌شود */
+@media (min-width:900px){
+  .table-wrap{ max-width:820px; margin:0 auto;}
+  :root{ --cardW:clamp(60px, 8vw, 88px); --cardW-player:clamp(74px, 10vw, 108px); }
+}
+/* پشتیبانی از notch و safe-area در گوشی‌های تمام‌صفحه هنگام چرخش افقی */
+@media (orientation:landscape){
+  .board{ gap:2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Mهوش مصنوعی رباتN MENU ============ -->
+<div class="screen" id="screen-menu">
+  <button class="profile-widget" id="btn-open-profile">
+    <div class="profile-avatar" id="profile-avatar-menu">👤</div>
+    <div class="profile-texts">
+      <div class="profile-name" id="profile-name-menu">مهمان</div>
+      <div class="profile-username" id="profile-username-menu">پروفایل خودت را بساز</div>
+    </div>
+    <span class="profile-arrow">‹</span>
+  </button>
+  <div style="margin-top:2vh;">
+    <div class="medallion"></div>
+    <div class="title-fa">پاسور ۱۱</div>
+    <div class="subtitle-fa">بازی چهار برگ ایرانی</div>
+  </div>
+  <div class="menu-grid" style="margin-top:4vh;">
+    <button class="btn primary" id="btn-continue"><span class="ic">↺</span>ادامه بازی<small>بازی نیمه‌کاره</small></button>
+    <button class="btn" id="btn-newgame"><span class="ic">✚</span>بازی جدید<small>شروع دوباره</small></button>
+    <button class="btn" id="btn-help"><span class="ic">❋</span>راهنمای بازی<small>قوانین کامل</small></button>
+    <button class="btn" id="btn-about"><span class="ic">☙</span>درباره برنامه<small>معرفی</small></button>
+    <button class="btn" id="btn-settings"><span class="ic">⚙</span>تنظیمات<small>سفارشی‌سازی</small></button>
+    <button class="btn ghost" id="btn-multiplayer"><span class="ic">📶</span>بازی دو نفره<small>با وای‌فای مشترک</small></button>
+  </div>
+  <div style="margin-top:auto; text-align:center; font-size:11px; opacity:.5; padding-top:10px;">ساخته‌شده برای اجرای آفلاین روی هر گوشی</div>
+</div>
+
+<!-- ============ PROFILE ============ -->
+<div class="screen hidden scroll" id="screen-profile">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">پروفایل من</h2>
+      <button class="btn small" data-back>بازگشت</button>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px; padding:6px 0 14px;">
+      <div class="profile-avatar" id="profile-avatar-edit" style="width:88px; height:88px; font-size:38px;">👤</div>
+      <input type="file" accept="image/*" id="set-profile-avatar-file">
+      <button class="btn ghost small" id="btn-profile-avatar-remove">حذف عکس پروفایل</button>
+    </div>
+    <div class="field"><label>نام نمایشی (در بازی دیده می‌شود)</label><input type="text" id="profile-name-input" maxlength="12"></div>
+    <p id="profile-name-error" style="display:none; color:#e5807a; text-align:center; font-size:12px; margin:-6px 0 4px;">لطفاً یک اسم وارد کن، این قسمت نمی‌تواند خالی بماند</p>
+    <div class="field"><label>نام‌کاربری</label><input type="text" id="profile-username-input" maxlength="20" placeholder="مثلاً: ali_1990" style="direction:ltr; text-align:left;"></div>
+    <p style="font-size:11px; opacity:.6; margin:-6px 4px 4px; text-align:center;">فقط حروف و اعداد انگلیسی، خط زیر (_) و نقطه مجاز است</p>
+
+    <div class="section-title">حساب گوگل</div>
+    <p style="font-size:12px; opacity:.8; margin-top:-4px; line-height:1.8;">با ورود با گوگل، اسم و عکس پروفایلت خودکار پر می‌شود. این کار فقط برای پرکردن پروفایله، نه یک سیستم امنیتیِ واقعی؛ همچنین فقط زمانی کار می‌کند که گوشی به اینترنت وصل باشد.</p>
+    <div id="google-signin-area" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:6px 0 4px;">
+      <div id="google-signin-btn-holder"></div>
+      <p id="google-signin-status" style="font-size:12px; opacity:.75; text-align:center; min-height:16px;"></p>
+      <div id="google-signed-in-box" style="display:none; align-items:center; gap:10px; background:rgba(0,0,0,.2); border-radius:12px; padding:8px 12px; width:100%;">
+        <div id="google-account-avatar" style="width:34px; height:34px; border-radius:50%; background-size:cover; background-position:center; flex:0 0 auto; border:1px solid rgba(217,178,76,.4);"></div>
+        <div style="flex:1; overflow:hidden;">
+          <div id="google-account-name" style="font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+          <div id="google-account-email" style="font-size:11px; opacity:.65; direction:ltr; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+        </div>
+        <button class="btn ghost small" id="btn-google-signout">خروج</button>
+      </div>
+    </div>
+
+    <button class="btn primary" style="width:100%; justify-content:center; margin-top:16px;" id="btn-save-profile">ذخیره پروفایل</button>
+  </div>
+</div>
+
+<!-- ============ HELP ============ -->
+<div class="screen hidden scroll" id="screen-help">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">راهنمای بازی پاسور ۱۱</h2>
+      <button class="btn small" data-back>بازگشت</button>
+    </div>
+    <div class="divider"></div>
+
+    <div class="section-title">۱. معرفی و وسایل بازی</div>
+    <p>پاسور ۱۱ (که با نام‌های چهار برگ، یازده، سور و هفت‌خاج هم شناخته می‌شود) یک بازی محبوب ایرانی با یک دست کامل ورق ۵۲ برگی است. در این نسخه شما در برابر ربات بازی می‌کنید.</p>
+
+    <div class="section-title">۲. نحوهٔ پخش کارت</div>
+    <p>در ابتدای هر دور، ۴ برگ به شما، ۴ برگ به ربات و ۴ برگ رو به بالا روی زمین گذاشته می‌شود. اگر در میان برگ‌های روی زمین «سرباز» باشد، آن سرباز برداشته و درون بستهٔ باقی‌مانده قرار می‌گیرد و برگی دیگر جایگزین آن می‌شود. سپس نفری که برگ نگرفته شروع می‌کند و به‌نوبت یک برگ بازی می‌کنید.</p>
+
+    <div class="section-title">۳. برداشتن ورق از زمین (جمع کردن)</div>
+    <p>در هر نوبت یک برگ از دست خود انتخاب می‌کنید. اگر مجموع آن برگ با یک یا چند برگ روی زمین (حداکثر مجموع ۳ برگ از زمین) برابر با <b>۱۱</b> شود، می‌توانید آن‌ها را بردارید. آس همیشه به‌عنوان عدد ۱ حساب می‌شود.</p>
+    <p><b>شکل‌ها (سرباز، بی‌بی، شاه)</b> در جمع عددی حساب نمی‌شوند:</p>
+    <ul>
+      <li>شاه فقط شاه را از زمین برمی‌دارد.</li>
+      <li>بی‌بی فقط بی‌بی را از زمین برمی‌دارد.</li>
+      <li>سرباز ویژه است: تمام برگ‌های روی زمین به‌جز شاه و بی‌بی را یک‌جا جمع می‌کند.</li>
+    </ul>
+    <p>اگر برگ بازی‌شدهٔ شما با هیچ برگی جور نشود، همان‌طور رو به بالا روی زمین گذاشته می‌شود تا در نوبت‌های بعد قابل برداشت باشد.</p>
+
+    <div class="section-title">۴. سور زدن</div>
+    <p>اگر با یک حرکت تمام برگ‌های روی زمین را جمع کنید، «سور» زده‌اید و ۵ امتیاز جداگانه می‌گیرید. توجه: جمع کردن با <b>سرباز</b> هرگز سور محسوب نمی‌شود، چون سرباز به‌طور طبیعی همه‌چیز را جمع می‌کند. بسته به تنظیمات شما، ممکن است سور زدن در «دست آخر» یا «برگ آخر» بازی غیرمجاز باشد؛ در آن حالت برگ‌ها جمع می‌شود ولی امتیاز سور تعلق نمی‌گیرد.</p>
+
+    <div class="section-title">۵. پایان هر دور</div>
+    <p>پس از پایان بستهٔ ۵۲ برگی (هر بار که دست‌ها خالی شود، دوباره ۴ برگ به هرکس داده می‌شود، بدون برگ جدید روی زمین)، اگر برگی روی زمین باقی بماند، به کسی می‌رسد که آخرین برداشت را انجام داده است.</p>
+
+    <div class="section-title">۶. امتیازشماری هر دور</div>
+    <ul>
+      <li>خاج بیشتر: هرکس خاج (گیشنیز) بیشتری جمع کرده باشد <b>۷ امتیاز</b> می‌گیرد.</li>
+      <li>هر آس: <b>۱ امتیاز</b></li>
+      <li>هر سرباز: <b>۱ امتیاز</b></li>
+      <li>۱۰ خشت: <b>۳ امتیاز</b></li>
+      <li>۲ گیشنیز (خاج): <b>۲ امتیاز</b></li>
+      <li>هر سور: <b>۵ امتیاز</b></li>
+    </ul>
+    <p>مجموع امتیاز هر دور بدون احتساب سور، ۲۰ امتیاز است. دورها ادامه پیدا می‌کند تا یکی از بازیکنان به امتیاز نهایی تعیین‌شده در تنظیمات برسد و برندهٔ کل بازی شود.</p>
+
+    <div class="section-title">۷. توضیح تنظیمات ویژه</div>
+    <ul>
+      <li><b>مجاز بودن سور در دست آخر:</b> اگر خاموش باشد، در واپسین دستِ ۴برگی هر دور، جمع‌کردن کل زمین دیگر امتیاز سور نمی‌دهد.</li>
+      <li><b>مجاز بودن سور در برگ آخر:</b> اگر خاموش باشد، دقیقاً آخرین برگی که در کل دور بازی می‌شود، حتی اگر همهٔ زمین را جمع کند، امتیاز سور نمی‌دهد.</li>
+      <li><b>برگرداندن سور حریف:</b> اگر روشن باشد و حریف سور بزند، شما با سور زدن در نوبت بلافصل بعدی خودتان، به‌جای گرفتن امتیاز جدید، امتیاز سور حریف را خنثی و باطل می‌کنید.</li>
+    </ul>
+
+    <div class="section-title">۸. نحوهٔ بازی‌کردن با لمس</div>
+    <ul>
+      <li><b>یک لمس ساده روی کارت دست</b> کافیست: اگر آن کارت هیچ برداشتی نداشته باشد، خودکار روی زمین گذاشته می‌شود؛ اگر دقیقاً یک برداشت معتبر داشته باشد (مثلاً جارو با سرباز/شاه/بی‌بی)، همان فوراً انجام می‌شود.</li>
+      <li>اگر چند ترکیب متفاوت برای برداشتن ممکن باشد (مثلاً چند جمع مختلف که به ۱۱ می‌رسند)، کارت دست انتخاب می‌شود و باید کارت‌های موردنظر روی زمین را لمس کنید؛ به‌محض تکمیل یک ترکیب درست، خودکار بازی می‌شود.</li>
+      <li>در همین حالت، اگر بخواهید کارت را <b>بدون برداشتن چیزی</b> فقط روی زمین بگذارید، کارتِ انتخاب‌شده را کمی <b>نگه دارید</b> (لمس طولانی).</li>
+      <li>برای انصراف از انتخاب، دوباره روی همان کارتِ انتخاب‌شده لمس کنید.</li>
+      <li>روی نوشتهٔ «برگ شما» یا «برگ ربات» بالای صفحه بزنید تا کارت‌هایی که تا این لحظه جمع کرده‌اید را ببینید.</li>
+      <li>اگر بازی هنگ کرد یا واکنش نشان نداد، از دکمهٔ گرد ♺ بالای صفحه برای ریست کامل استفاده کنید.</li>
+    </ul>
+
+    <div class="section-title">۹. بازی دو نفره (وای‌فای مشترک)</div>
+    <p>از منوی اصلی، «بازی دو نفره» را باز کنید. یک نفر «میزبان» می‌شود و یک کد می‌سازد؛ نفر دوم با «پیوستن»، آن کد را وارد و یک کد پاسخ تولید می‌کند که باید به میزبان بدهد. هر دو گوشی باید روی یک وای‌فای مشترک باشند (نیازی به اینترنت واقعی نیست). بعد از اتصال، میزبان دکمهٔ «شروع بازی دو نفره» را می‌زند. اسم هرکس برای طرف مقابل هم نمایش داده می‌شود. اگر اتصال قطع شد، از دکمهٔ ریست اضطراری برای بازگشت به منو استفاده کنید.</p>
+
+    <div class="section-title">۱۰. تنظیمات و شخصی‌سازی</div>
+    <p>از بخش «تنظیمات» می‌توانید: اسم و امتیاز هدف را تغییر دهید، سطح سختی ربات را عوض کنید، صدای کارت و موزیک ملایم پس‌زمینه را روشن/خاموش کنید، لرزش گوشی و انیمیشن پرواز کارت را کنترل کنید، مرتب‌سازی خودکار دست را فعال کنید، و یک تصویر دلخواه برای پشت یا روی کارت‌ها از گالری گوشی انتخاب کنید (با تنظیم بزرگ‌نمایی و موقعیت). از بخش «پروفایل» هم می‌توانید عکس و نام‌کاربری خودتان را تنظیم کنید یا با حساب گوگل وارد شوید.</p>
+    <div style="height:10px;"></div>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<div class="screen hidden scroll" id="screen-about">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">دربارهٔ برنامه</h2>
+      <button class="btn small" data-back>بازگشت</button>
+    </div>
+    <div class="divider"></div>
+    <div class="medallion" style="width:80px;height:80px;"></div>
+    <p style="text-align:center;">پاسور ۱۱ یک بازی رومیزی اصیل ایرانی است که نسل‌ها دور یک سفره یا میز چای، دوستان و خانواده‌ها را کنار هم نشانده. این نسخه با عشق به همان حس گرم دورهمی طراحی شده؛ بدون نیاز به اینترنت، بدون تبلیغات و بدون اتصال به هیچ سروری — همه‌چیز همین‌جا، روی گوشی یا کامپیوتر خودتان اجرا می‌شود.</p>
+    <p>هدف این برنامه ساده بودن در استفاده و لذت‌بخش بودن در بازی است: کارت‌هایی که به‌صورت کامل در کد طراحی شده‌اند (بدون نیاز به دانلود هیچ تصویری)، انیمیشن‌های نرم پخش و برداشتن کارت، و هوش مصنوعی حریف با پنج سطح دشواری از مبتدی تا غیرممکن.</p>
+    <p style="text-align:center; opacity:.7; font-size:12px;">نسخهٔ ۱.۰ &middot; ساخته‌شده با Claude</p>
+  </div>
+</div>
+
+<!-- ============ SETTINGS ============ -->
+<div class="screen hidden scroll" id="screen-settings">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">تنظیمات</h2>
+      <button class="btn small" data-back>بازگشت</button>
+    </div>
+    <div class="divider"></div>
+
+    <div class="section-title">نام‌ها</div>
+    <div class="field"><label>نام شما در بازی</label><input type="text" id="set-playername" maxlength="12"></div>
+    <div class="field"><label>نام ربات در بازی</label><input type="text" id="set-botname" maxlength="12"></div>
+
+    <div class="section-title">امتیاز</div>
+    <div class="field"><label>امتیاز نهایی برای برد بازی</label><input type="number" id="set-target" min="20" max="500" step="10"></div>
+
+    <div class="section-title">سطح دشواری</div>
+    <div class="field">
+      <label>هوش ربات</label>
+      <select id="set-difficulty">
+        <option value="beginner">مبتدی</option>
+        <option value="easy">آسان</option>
+        <option value="normal">معمولی</option>
+        <option value="hard">سخت</option>
+        <option value="impossible">غیر ممکن</option>
+      </select>
+    </div>
+
+    <div class="section-title">قوانین سور</div>
+    <div class="field">
+      <label>مجاز بودن سور در دست آخر</label>
+      <label class="switch"><input type="checkbox" id="set-surlasthand"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>مجاز بودن سور در برگ آخر</label>
+      <label class="switch"><input type="checkbox" id="set-surlastcard"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>برگرداندن سور حریف در صورت سور زدن</label>
+      <label class="switch"><input type="checkbox" id="set-returnsur"><span class="track"></span></label>
+    </div>
+
+    <div class="section-title">صدا و تجربه بازی</div>
+    <div class="field">
+      <label>صدای گذاشتن و برداشتن کارت</label>
+      <label class="switch"><input type="checkbox" id="set-soundfx"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>موزیک ملایم پس‌زمینه</label>
+      <label class="switch"><input type="checkbox" id="set-music"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>لرزش گوشی هنگام بازی‌کردن کارت</label>
+      <label class="switch"><input type="checkbox" id="set-haptic"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>انیمیشن پرواز کارت</label>
+      <label class="switch"><input type="checkbox" id="set-animations"><span class="track"></span></label>
+    </div>
+    <div class="field">
+      <label>مرتب‌سازی خودکار کارت‌های دست</label>
+      <label class="switch"><input type="checkbox" id="set-autosort"><span class="track"></span></label>
+    </div>
+
+    <div class="section-title">طرح پشت کارت</div>
+    <p style="font-size:12.5px; opacity:.8; margin-top:-4px;">می‌توانید یک تصویر دلخواه از گالری گوشی خود برای پشت کارت‌ها انتخاب کنید و اندازه و موقعیت آن را تنظیم کنید.</p>
+    <div class="field">
+      <label>انتخاب تصویر از گالری</label>
+      <input type="file" accept="image/*" id="set-cardback-file" style="max-width:150px; font-size:11px;">
+    </div>
+    <div id="cardback-preview-wrap" style="display:none; align-items:center; gap:14px; padding:8px 4px;">
+      <div class="card back" id="cardback-preview" style="width:56px; height:81px; flex:0 0 auto;"></div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">بزرگ‌نمایی</label><input type="range" id="set-cardback-zoom" min="50" max="220" step="5" style="width:110px;"></div>
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">موقعیت افقی</label><input type="range" id="set-cardback-posx" min="0" max="100" step="2" style="width:110px;"></div>
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">موقعیت عمودی</label><input type="range" id="set-cardback-posy" min="0" max="100" step="2" style="width:110px;"></div>
+        <button class="btn ghost small" id="btn-cardback-remove" style="align-self:flex-start;">حذف تصویر و بازگشت به طرح پیش‌فرض</button>
+      </div>
+    </div>
+
+    <div class="section-title">طرح روی کارت‌ها (یکسان برای همه‌ی کارت‌ها)</div>
+    <p style="font-size:12.5px; opacity:.8; margin-top:-4px;">این تصویر پشت‌زمینه‌ی روی همه‌ی ۵۲ کارت (پشت عدد و خال) یکسان قرار می‌گیرد.</p>
+    <div class="field">
+      <label>انتخاب تصویر از گالری</label>
+      <input type="file" accept="image/*" id="set-cardfront-file" style="max-width:150px; font-size:11px;">
+    </div>
+    <div id="cardfront-preview-wrap" style="display:none; align-items:center; gap:14px; padding:8px 4px;">
+      <div class="card" id="cardfront-preview" style="width:56px; height:81px; flex:0 0 auto; display:flex; justify-content:space-between; padding:4px 5px;">
+        <div class="corner tl">۷<span>♣</span></div><div class="corner br">۷<span>♣</span></div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">بزرگ‌نمایی</label><input type="range" id="set-cardfront-zoom" min="50" max="220" step="5" style="width:110px;"></div>
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">موقعیت افقی</label><input type="range" id="set-cardfront-posx" min="0" max="100" step="2" style="width:110px;"></div>
+        <div class="field" style="padding:2px 0; border:none;"><label style="font-size:12px;">موقعیت عمودی</label><input type="range" id="set-cardfront-posy" min="0" max="100" step="2" style="width:110px;"></div>
+        <button class="btn ghost small" id="btn-cardfront-remove" style="align-self:flex-start;">حذف تصویر و بازگشت به طرح پیش‌فرض</button>
+      </div>
+    </div>
+
+    <button class="btn primary" style="width:100%; justify-content:center; margin-top:16px;" id="btn-save-settings">ذخیرهٔ تنظیمات</button>
+  </div>
+</div>
+
+<!-- ============ NEW GAME CONFIRM ============ -->
+<div class="modal-bg hidden" id="modal-newgame-confirm">
+  <div class="modal">
+    <h2>بازی جدید</h2>
+    <p style="text-align:center;">یک بازی نیمه‌کاره وجود دارد. با شروع بازی جدید، آن بازی از بین می‌رود. ادامه می‌دهید؟</p>
+    <div class="modal-actions">
+      <button class="btn ghost" style="flex:1;" id="ng-cancel">انصراف</button>
+      <button class="btn primary" style="flex:1;" id="ng-confirm">بله، بازی جدید</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ENTER NAME (اولین بار) ============ -->
+<div class="modal-bg hidden" id="modal-enter-name">
+  <div class="modal">
+    <h2>اسمت چیه؟</h2>
+    <p style="text-align:center; font-size:13px; opacity:.85;">این اسم توی بازی به‌جای «شما» نشون داده میشه و در بازی دو نفره، حریفت هم همین اسم رو می‌بینه.</p>
+    <div class="field"><input type="text" id="enter-name-input" maxlength="12" placeholder="مثلاً: علی" style="width:100%; text-align:center; font-size:16px;"></div>
+    <p id="enter-name-error" style="display:none; color:#e5807a; text-align:center; font-size:12px; margin:-6px 0 4px;">لطفاً یک اسم وارد کن، این قسمت نمی‌تواند خالی بماند</p>
+    <div class="modal-actions">
+      <button class="btn primary" style="flex:1;" id="enter-name-confirm">شروع بازی</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EMERGENCY RESET CONFIRM ============ -->
+<div class="modal-bg hidden" id="modal-emergency-reset">
+  <div class="modal">
+    <h2>ریست کامل بازی</h2>
+    <p style="text-align:center;">اگر بازی هنگ کرده یا دکمه‌ای پاسخ نمی‌دهد، با این گزینه بازی کاملاً ریست می‌شود و به منوی اصلی برمی‌گردید. دور نیمه‌کاره از بین می‌رود.</p>
+    <div class="modal-actions">
+      <button class="btn ghost" style="flex:1;" id="er-cancel">انصراف</button>
+      <button class="btn primary" style="flex:1;" id="er-confirm">بله، ریست کن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COLLECTED CARDS MODAL ============ -->
+<div class="modal-bg hidden" id="modal-collected">
+  <div class="modal">
+    <h2 id="collected-title">کارت‌های جمع‌شده</h2>
+    <div id="collected-body" style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-height:50vh; overflow-y:auto; padding:6px 0;"></div>
+    <div class="modal-actions">
+      <button class="btn primary" style="flex:1;" id="collected-close">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div class="screen hidden" id="screen-game">
+  <!-- دکمه ریست اضطراری: همیشه فعال است تا اگر بازی به هر دلیلی هنگ کرد کاربر گیر نکند -->
+  <button class="reset-fab" id="btn-emergency-reset" title="ریست کامل بازی" aria-label="ریست کامل بازی">♺</button>
+  <div class="board">
+    <div class="hud">
+      <div class="who" id="hud-bot"><span class="dot"></span><span id="hud-bot-name">ربات</span> · <span id="hud-bot-score">۰</span></div>
+      <div class="mid">دور <span id="hud-round">۱</span> — دست <span id="hud-dealnum">۱</span></div>
+      <div class="who" id="hud-player"><span class="dot"></span><span id="hud-player-name">شما</span> · <span id="hud-player-score">۰</span></div>
+    </div>
+
+    <div class="hand-row bot-hand" id="bot-hand"></div>
+
+    <div class="table-wrap">
+      <div class="table-oval" id="table-area">
+        <div class="table-empty-hint" id="table-empty-hint">زمین خالی است</div>
+        <div class="deckpile" id="deckpile"><div class="card back" style="width:36px;height:50px;"></div><div class="count" id="deck-count">۴۰</div></div>
+      </div>
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <div class="piles-row">
+      <div class="pile-badge" id="badge-bot-collected" style="cursor:pointer;">🂠 <span id="bot-collected-count">۰</span> برگ ربات</div>
+      <div class="pile-badge" id="sur-indicator" style="display:none;"></div>
+      <div class="pile-badge" id="badge-player-collected" style="cursor:pointer;">🂠 <span id="player-collected-count">۰</span> برگ شما</div>
+    </div>
+
+    <div class="hand-row" id="player-hand"></div>
+    <p id="selection-hint" style="text-align:center; font-size:11.5px; opacity:.75; min-height:16px; margin:2px 0;"></p>
+
+    <div class="action-bar">
+      <button class="btn-icon-exit" id="btn-quit-game" title="خروج به منو" aria-label="خروج به منو" style="margin-inline-start:auto;">🏠</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ROUND SUMMARY MODAL ============ -->
+<div class="modal-bg hidden" id="modal-round">
+  <div class="modal">
+    <h2 id="round-title">پایان دور</h2>
+    <div id="round-body"></div>
+    <div class="modal-actions">
+      <button class="btn primary" style="flex:1;" id="round-continue">دور بعدی</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GAME OVER MODAL ============ -->
+<div class="modal-bg hidden" id="modal-gameover">
+  <div class="modal">
+    <h2 id="over-title">پایان بازی</h2>
+    <div id="over-body"></div>
+    <div class="modal-actions">
+      <button class="btn primary" style="flex:1;" id="over-menu">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MULTIPLAYER: HUB ============ -->
+<div class="screen hidden" id="screen-mp-hub">
+  <div class="panel" style="margin:auto;">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">بازی دو نفره</h2>
+      <button class="btn small" data-back>بازگشت</button>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px; opacity:.85; line-height:1.9;">
+      برای بازی دو نفره باید هر دو گوشی به <b>یک وای‌فای مشترک</b> وصل باشند (نیازی به اینترنت واقعی نیست، فقط باید هر دو به یک روتر/هات‌اسپات وصل باشند). یک نفر «میزبان» می‌شود و دیگری با کد نمایش‌داده‌شده «می‌پیوندد».
+    </p>
+    <div class="menu-grid" style="grid-template-columns:1fr; margin-top:10px;">
+      <button class="btn primary" id="btn-mp-host"><span class="ic">👑</span>میزبان بازی باش<small>یک کد برای بازیکن دوم بساز</small></button>
+      <button class="btn" id="btn-mp-join"><span class="ic">🔗</span>پیوستن به بازی<small>کد میزبان را وارد کن</small></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MULTIPLAYER: HOST ============ -->
+<div class="screen hidden scroll" id="screen-mp-host">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">میزبانیِ بازی</h2>
+      <button class="btn small" id="btn-mp-host-back">بازگشت</button>
+    </div>
+    <div class="divider"></div>
+
+    <!-- حالت کد کوتاه (وقتی فایربیس تنظیم شده باشد) -->
+    <div id="mp-host-shortcode-box" style="display:none; text-align:center;">
+      <p style="font-size:12.5px; opacity:.8;">این کد را به بازیکن دوم بده تا در قسمت «پیوستن» واردش کند:</p>
+      <div id="mp-host-shortcode" style="font-size:34px; font-weight:800; letter-spacing:4px; color:var(--gold); direction:ltr; margin:8px 0;">-------</div>
+      <button class="btn ghost small" id="btn-mp-copy-shortcode">کپی کد</button>
+      <p id="mp-host-status-short" style="text-align:center; font-size:12.5px; margin-top:14px; opacity:.85;">در حال ساخت کد…</p>
+    </div>
+
+    <!-- حالت دستی (وقتی فایربیس تنظیم نشده) -->
+    <div id="mp-host-manual-box">
+      <div id="mp-host-step1">
+        <div class="section-title">مرحله ۱: کد بازی خودت</div>
+        <p style="font-size:12.5px; opacity:.8;">این کد را برای بازیکن دوم بفرست (با نشان دادن گوشی یا هر روش دیگری) و از او بخواه در قسمت «پیوستن» این کد را وارد کند.</p>
+        <textarea id="mp-host-offer" readonly style="width:100%; height:90px; font-size:11px; padding:8px; border-radius:10px; border:1px solid rgba(217,178,76,.3); background:rgba(0,0,0,.25); color:var(--cream); resize:none;"></textarea>
+        <button class="btn ghost small" id="btn-mp-copy-offer" style="margin-top:8px;">کپی کد</button>
+      </div>
+      <div class="section-title">مرحله ۲: کد پاسخ بازیکن دوم را وارد کن</div>
+      <textarea id="mp-host-answer" placeholder="کد پاسخی که بازیکن دوم به تو داد را اینجا بچسبان..." style="width:100%; height:90px; font-size:11px; padding:8px; border-radius:10px; border:1px solid rgba(217,178,76,.3); background:rgba(0,0,0,.25); color:var(--cream); resize:none;"></textarea>
+      <button class="btn primary" id="btn-mp-connect-host" style="width:100%; justify-content:center; margin-top:10px;">اتصال به بازیکن دوم</button>
+      <p id="mp-host-status" style="text-align:center; font-size:12.5px; margin-top:10px; opacity:.85;">در انتظار وارد کردن کد پاسخ…</p>
+    </div>
+
+    <button class="btn primary" id="btn-mp-start-game" style="width:100%; justify-content:center; margin-top:6px; display:none;">شروع بازی دو نفره</button>
+  </div>
+</div>
+
+<!-- ============ MULTIPLAYER: JOIN ============ -->
+<div class="screen hidden scroll" id="screen-mp-join">
+  <div class="panel">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 style="margin:0;">پیوستن به بازی</h2>
+      <button class="btn small" id="btn-mp-join-back">بازگشت</button>
+    </div>
+    <div class="divider"></div>
+
+    <!-- حالت کد کوتاه (وقتی فایربیس تنظیم شده باشد) -->
+    <div id="mp-join-shortcode-box" style="display:none;">
+      <p style="font-size:12.5px; opacity:.8; text-align:center;">کد ۷ رقمی میزبان را وارد کن:</p>
+      <input type="text" id="mp-join-shortcode-input" maxlength="7" inputmode="numeric" placeholder="1234567" style="width:100%; text-align:center; font-size:26px; letter-spacing:6px; direction:ltr; padding:10px; border-radius:10px; border:1px solid rgba(217,178,76,.3); background:rgba(0,0,0,.25); color:var(--cream);">
+      <button class="btn primary" id="btn-mp-join-shortcode" style="width:100%; justify-content:center; margin-top:10px;">اتصال</button>
+      <p id="mp-join-status-short" style="text-align:center; font-size:12.5px; margin-top:10px; opacity:.85;"></p>
+    </div>
+
+    <!-- حالت دستی (وقتی فایربیس تنظیم نشده) -->
+    <div id="mp-join-manual-box">
+      <div class="section-title">مرحله ۱: کد میزبان را بچسبان</div>
+      <textarea id="mp-join-offer" placeholder="کدی که میزبان به تو داد را اینجا بچسبان..." style="width:100%; height:90px; font-size:11px; padding:8px; border-radius:10px; border:1px solid rgba(217,178,76,.3); background:rgba(0,0,0,.25); color:var(--cream); resize:none;"></textarea>
+      <button class="btn primary" id="btn-mp-make-answer" style="width:100%; justify-content:center; margin-top:10px;">ساخت کد پاسخ</button>
+
+      <div id="mp-join-step2" style="display:none; margin-top:14px;">
+        <div class="section-title">مرحله ۲: این کد را به میزبان بده</div>
+        <textarea id="mp-join-answer" readonly style="width:100%; height:90px; font-size:11px; padding:8px; border-radius:10px; border:1px solid rgba(217,178,76,.3); background:rgba(0,0,0,.25); color:var(--cream); resize:none;"></textarea>
+        <button class="btn ghost small" id="btn-mp-copy-answer" style="margin-top:8px;">کپی کد</button>
+      </div>
+      <p id="mp-join-status" style="text-align:center; font-size:12.5px; margin-top:10px; opacity:.85;"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   تبدیل اعداد به رقم فارسی
+   ============================================================ */
+const FA_DIGITS = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+function fa(n){ return String(n).replace(/[0-9]/g, d=>FA_DIGITS[d]); }
+
+/* ============================================================
+   ذخیره‌سازی محلی (تنظیمات و بازی ذخیره‌شده)
+   ============================================================ */
+const LS_SETTINGS = 'pasur11_settings_v1';
+const LS_GAME = 'pasur11_game_v1';
+
+const DEFAULT_SETTINGS = {
+  playerName:'شما', botName:'ربات', targetScore:100, difficulty:'normal',
+  surLastHand:true, surLastCard:true, returnSur:false,
+  /* --- تنظیمات جدید --- */
+  soundEffects:true,      // پخش صدای کوتاه هنگام گذاشتن/برداشتن کارت
+  music:false,            // موزیک ملایم پس‌زمینه در منوی اصلی (پیش‌فرض خاموش)
+  autoSortHand:true,      // مرتب‌سازی خودکار کارت‌های دست بر اساس خال و عدد
+  hapticFeedback:true,    // لرزش کوتاه گوشی هنگام بازی‌کردن کارت (در گوشی‌های پشتیبانی‌شده)
+  animationsEnabled:true, // روشن/خاموش کردن انیمیشن پرواز کارت
+  cardBackImage:null,     // تصویر دلخواه کاربر برای پشت کارت (data URL)
+  cardBackZoom:100,       // درصد بزرگ‌نمایی تصویر پشت کارت
+  cardBackPosX:50,        // موقعیت افقی تصویر پشت کارت (٪)
+  cardBackPosY:50,        // موقعیت عمودی تصویر پشت کارت (٪)
+  cardFrontImage:null,    // تصویر دلخواه کاربر برای روی همه کارت‌ها (data URL)
+  cardFrontZoom:100,
+  cardFrontPosX:50,
+  cardFrontPosY:50,
+  profileUsername:'',     // نام‌کاربری پروفایل
+  profileAvatar:null,     // عکس پروفایل (data URL)
+  profileSet:false,       // آیا کاربر یک‌بار پروفایل/نام را تنظیم کرده است
+  profileEmail:'',        // ایمیل حساب گوگل (فقط برای نمایش در پروفایل)
+  googleSignedIn:false    // آیا کاربر با گوگل وارد شده است
+};
+
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem(LS_SETTINGS);
+    if(!raw) return Object.assign({}, DEFAULT_SETTINGS);
+    return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(raw));
+  }catch(e){ return Object.assign({}, DEFAULT_SETTINGS); }
+}
+function saveSettings(s){ try{ localStorage.setItem(LS_SETTINGS, JSON.stringify(s)); }catch(e){} }
+
+function saveGame(g){ try{ localStorage.setItem(LS_GAME, JSON.stringify(g)); }catch(e){} }
+function loadGame(){
+  try{
+    const raw = localStorage.getItem(LS_GAME);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(e){ return null; }
+}
+function clearGame(){ try{ localStorage.removeItem(LS_GAME); }catch(e){} }
+
+let settings = loadSettings();
+
+/* ============================================================
+   صدا: افکت‌های کوتاه و موزیک ملایم پس‌زمینه
+   همه‌چیز با Web Audio API و به‌صورت کاملاً برنامه‌ای ساخته می‌شود
+   (بدون فایل صوتی خارجی) تا برنامه کاملاً آفلاین کار کند.
+   ============================================================ */
+const SoundEngine = (function(){
+  let ctx = null;
+  let musicNodes = null;
+  let musicPlaying = false;
+
+  function ensureCtx(){
+    if(!ctx){
+      try{ ctx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ ctx = null; }
+    }
+    if(ctx && ctx.state==='suspended'){ ctx.resume().catch(()=>{}); }
+    return ctx;
+  }
+
+  // صدای کوتاه «تیک» هنگام گذاشتن کارت روی زمین
+  function place(){
+    if(!settings.soundEffects) return;
+    const c = ensureCtx(); if(!c) return;
+    const t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type='triangle';
+    osc.frequency.setValueAtTime(340, t);
+    osc.frequency.exponentialRampToValueAtTime(180, t+0.09);
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.exponentialRampToValueAtTime(0.22, t+0.012);
+    gain.gain.exponentialRampToValueAtTime(0.001, t+0.13);
+    osc.connect(gain); gain.connect(c.destination);
+    osc.start(t); osc.stop(t+0.15);
+  }
+  // صدای «جمع‌کردن» کارت از زمین، کمی روشن‌تر و دوضربه‌ای
+  function capture(){
+    if(!settings.soundEffects) return;
+    const c = ensureCtx(); if(!c) return;
+    const t = c.currentTime;
+    [0,0.07].forEach((delay,i)=>{
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(520 + i*140, t+delay);
+      gain.gain.setValueAtTime(0.001, t+delay);
+      gain.gain.exponentialRampToValueAtTime(0.2, t+delay+0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, t+delay+0.16);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t+delay); osc.stop(t+delay+0.18);
+    });
+  }
+
+  // موزیک ملایم پس‌زمینه: چند نت آرام و تکرارشونده شبیه موسیقی کلاسیک ملایم
+  function startMusic(){
+    try{
+      if(musicPlaying || !settings.music) return;
+      const c = ensureCtx(); if(!c) return;
+      musicPlaying = true;
+      const master = c.createGain();
+      master.gain.value = 0.16;
+      master.connect(c.destination);
+      const notes = [196.00, 220.00, 261.63, 293.66, 246.94]; // سری نت‌های ملایم (سل، لا، دو، ر، سی)
+      let idx = 0;
+      function playNote(){
+        try{
+          if(!musicPlaying) return;
+          const c2 = ensureCtx(); if(!c2) return;
+          const t = c2.currentTime;
+          const osc = c2.createOscillator();
+          const g = c2.createGain();
+          osc.type='sine';
+          osc.frequency.value = notes[idx % notes.length];
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(0.8, t+1.2);
+          g.gain.exponentialRampToValueAtTime(0.0001, t+3.4);
+          osc.connect(g); g.connect(master);
+          osc.start(t); osc.stop(t+3.6);
+          idx++;
+          musicNodes.timer = setTimeout(playNote, 2200);
+        }catch(e){ console.error('خطای پخش نت موزیک:', e); }
+      }
+      musicNodes = {master, timer:null};
+      playNote();
+    }catch(e){ console.error('خطای شروع موزیک پس‌زمینه:', e); musicPlaying=false; }
+  }
+  function stopMusic(){
+    musicPlaying = false;
+    if(musicNodes && musicNodes.timer) clearTimeout(musicNodes.timer);
+    musicNodes = null;
+  }
+  function toggleMusic(on){
+    if(on) startMusic(); else stopMusic();
+  }
+  function isMusicPlaying(){ return musicPlaying; }
+  return {place, capture, ensureCtx, startMusic, stopMusic, toggleMusic, isMusicPlaying};
+})();
+function playSfx(kind){
+  try{
+    if(kind==='place') SoundEngine.place();
+    else if(kind==='capture') SoundEngine.capture();
+  }catch(e){ /* صدا اختیاری است؛ خطای آن نباید بازی را متوقف کند */ }
+}
+function vibrate(ms){
+  try{ if(settings.hapticFeedback && navigator.vibrate) navigator.vibrate(ms); }catch(e){}
+}
+
+/* ============================================================
+   مدل داده‌ای کارت‌ها (ساخت دسته کارت و بُر زدن)
+   ============================================================ */
+const SUITS = ['♠','♥','♦','♣'];
+const RED_SUITS = ['♥','♦'];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+function rankValue(r){
+  if(r==='A') return 1;
+  if(r==='J'||r==='Q'||r==='K') return 0;
+  return parseInt(r,10);
+}
+function isFace(r){ return r==='J'||r==='Q'||r==='K'; }
+function faLabel(r){
+  if(r==='A') return 'آ';
+  if(r==='J') return 'س'; // سرباز
+  if(r==='Q') return 'ب'; // بی‌بی
+  if(r==='K') return 'ش'; // شاه
+  return fa(r);
+}
+function suitName(s){
+  return s==='♠'?'پیک':s==='♥'?'دل':s==='♦'?'خشت':'گیشنیز';
+}
+function makeDeck(){
+  const d=[];
+  for(const s of SUITS) for(const r of RANKS) d.push({r,s,id:r+s});
+  return d;
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+// در صورت روشن بودن «مرتب‌سازی خودکار دست» در تنظیمات، کارت‌ها بر اساس خال و سپس عدد مرتب می‌شوند
+function sortHandIfNeeded(hand){
+  if(!settings.autoSortHand) return hand;
+  const suitOrder = {'♠':0,'♥':1,'♦':2,'♣':3};
+  const rankOrder = {'A':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13};
+  return hand.slice().sort((a,b)=> (suitOrder[a.s]-suitOrder[b.s]) || (rankOrder[a.r]-rankOrder[b.r]) );
+}
+
+/* ============================================================
+   وضعیت بازی (دست فعلی، انتخاب‌ها، قفل انیمیشن)
+   ============================================================ */
+let G = null; // active game object
+let selectedHandCard = null; // {r,s,id}
+let selectedTableIds = new Set();
+let animLock = false;
+let prevPlayerHandIds = new Set(); // برای تشخیص کارت‌های تازه‌واردشده به دست، جهت انیمیشن ورود
+
+function freshRoundState(dealerIsPlayer){
+  const deck = shuffle(makeDeck());
+  let table = deck.splice(0,4);
+  // remove jacks from initial table layout
+  let guard=0;
+  while(table.some(c=>c.r==='J') && guard<50){
+    guard++;
+    const jackIdx = table.findIndex(c=>c.r==='J');
+    const jack = table.splice(jackIdx,1)[0];
+    deck.push(jack);
+    shuffle(deck);
+    table.push(deck.shift());
+  }
+  const playerHand = sortHandIfNeeded(deck.splice(0,4));
+  const botHand = deck.splice(0,4);
+  return {
+    deck, table, playerHand, botHand,
+    playerCollected:[], botCollected:[],
+    playerSur:0, botSur:0,
+    turn: dealerIsPlayer ? 'bot' : 'player', // non-dealer starts
+    dealer: dealerIsPlayer ? 'player':'bot',
+    lastCapturer:null,
+    dealNumber:1,
+    isLastHand: deck.length===0, // true only if whole deck already exhausted (won't happen at start)
+    pendingSurOwner:null,
+    log:[]
+  };
+}
+
+function newGame(){
+  G = {
+    round:1,
+    playerTotal:0, botTotal:0,
+    dealerIsPlayer:false, // bot deals first round
+    finished:false,
+    r: null
+  };
+  G.r = freshRoundState(G.dealerIsPlayer);
+  persist();
+}
+
+function persist(){ if(G) saveGame(G); }
+
+/* ============================================================
+   اعتبارسنجی برداشتن کارت از زمین
+   ============================================================ */
+// returns {valid:bool, type:'place'|'numeric'|'face'|'jack', cards:[...]}
+function evaluateSelection(playedCard, table, selectedIds){
+  const selected = table.filter(c=>selectedIds.has(c.id));
+  if(selected.length===0) return {valid:true, type:'place', cards:[]};
+  if(playedCard.r==='J'){
+    const eligible = table.filter(c=>c.r!=='K' && c.r!=='Q');
+    const sameSet = eligible.length===selected.length && eligible.every(c=>selectedIds.has(c.id));
+    if(eligible.length>0 && sameSet) return {valid:true, type:'jack', cards:eligible};
+    return {valid:false};
+  }
+  if(playedCard.r==='K'||playedCard.r==='Q'){
+    const ok = selected.every(c=>c.r===playedCard.r);
+    if(ok) return {valid:true, type:'face', cards:selected};
+    return {valid:false};
+  }
+  // numeric
+  if(selected.length>3) return {valid:false};
+  if(selected.some(c=>isFace(c.r))) return {valid:false};
+  const sum = selected.reduce((a,c)=>a+rankValue(c.r),0) + rankValue(playedCard.r);
+  if(sum===11) return {valid:true, type:'numeric', cards:selected};
+  return {valid:false};
+}
+
+// enumerate ALL legal moves for a hand card against table (used by هوش مصنوعی ربات)
+function legalMovesForCard(card, table){
+  const moves = []; // each: {cards:[...], type}
+  moves.push({cards:[], type:'place'});
+  if(card.r==='J'){
+    const eligible = table.filter(c=>c.r!=='K' && c.r!=='Q');
+    if(eligible.length>0) moves.push({cards:eligible, type:'jack'});
+  } else if(card.r==='K'||card.r==='Q'){
+    const matches = table.filter(c=>c.r===card.r);
+    if(matches.length>0) moves.push({cards:matches, type:'face'});
+  } else {
+    const numeric = table.filter(c=>!isFace(c.r));
+    const target = 11 - rankValue(card.r);
+    const n = numeric.length;
+    for(let size=1; size<=Math.min(3,n); size++){
+      combos(numeric, size).forEach(combo=>{
+        const sum = combo.reduce((a,c)=>a+rankValue(c.r),0);
+        if(sum===target) moves.push({cards:combo, type:'numeric'});
+      });
+    }
+  }
+  return moves;
+}
+function combos(arr, k){
+  const res=[];
+  function rec(start, cur){
+    if(cur.length===k){ res.push(cur.slice()); return; }
+    for(let i=start;i<arr.length;i++){ cur.push(arr[i]); rec(i+1,cur); cur.pop(); }
+  }
+  rec(0,[]);
+  return res;
+}
+
+/* ============================================================
+   ارزش‌گذاری کارت‌ها (برای هوش مصنوعی و منطق خنثی‌سازی سور)
+   ============================================================ */
+function cardPoints(c){
+  let v = 0;
+  if(c.r==='A') v += 1;
+  if(c.r==='J') v += 1;
+  if(c.r==='10' && c.s==='♦') v += 3;
+  if(c.r==='2' && c.s==='♣') v += 2;
+  if(c.s==='♣') v += 0.18; // nudge toward club majority
+  v += 0.05; // card count nudge
+  return v;
+}
+function setValue(cards){ return cards.reduce((a,c)=>a+cardPoints(c),0); }
+
+/* ============================================================
+   اعمال یک حرکت (مشترک بین بازیکن و ربات) به همراه قلاب‌های انیمیشن
+   ============================================================ */
+function isLastCardOfRound(r){
+  return r.deck.length===0 && r.playerHand.length + r.botHand.length === 1;
+}
+
+function applyMove(who, card, moveCards, type, domInfo){
+  const r = G.r;
+  // must check BEFORE removing the card: "last card of round" means this play
+  // is the very last card left across both hands while the deck is empty.
+  const willBeLastCard = r.deck.length===0 && (r.playerHand.length + r.botHand.length)===1;
+  const hand = who==='player'?r.playerHand:r.botHand;
+  const idx = hand.findIndex(c=>c.id===card.id);
+  hand.splice(idx,1);
+
+  let capturedSomething = type!=='place';
+  let surHappened = false;
+
+  if(type==='place'){
+    r.table.push(card);
+  } else {
+    const ids = new Set(moveCards.map(c=>c.id));
+    r.table = r.table.filter(c=>!ids.has(c.id));
+    const collected = who==='player'?r.playerCollected:r.botCollected;
+    collected.push(card, ...moveCards);
+    r.lastCapturer = who;
+
+    const tableEmpty = r.table.length===0;
+    if(tableEmpty && type!=='jack'){
+      // potential sur
+      let allowed = true;
+      if(r.isLastHand && !settings.surLastHand) allowed = false;
+      if(willBeLastCard && !settings.surLastCard) allowed = false;
+      if(allowed){
+        if(settings.returnSur && r.pendingSurOwner && r.pendingSurOwner!==who){
+          if(who==='player') r.botSur = Math.max(0, r.botSur-1); else r.playerSur = Math.max(0, r.playerSur-1);
+          r.pendingSurOwner = null;
+          surHappened = 'cancel';
+        } else {
+          if(who==='player') r.playerSur++; else r.botSur++;
+          r.pendingSurOwner = who;
+          surHappened = 'sur';
+        }
+      } else {
+        surHappened = 'blocked';
+      }
+    } else if(!tableEmpty){
+      // if this player didn't clear table, and settings.returnSur window was open for THEM to cancel but they didn't sur -> window closes
+      if(r.pendingSurOwner && r.pendingSurOwner!==who){ r.pendingSurOwner = null; }
+    }
+  }
+
+  return {capturedSomething, surHappened, willBeLastCard};
+}
+
+function afterMoveAdvance(){
+  const r = G.r;
+  if(r.playerHand.length===0 && r.botHand.length===0){
+    if(r.deck.length>0){
+      r.playerHand = sortHandIfNeeded(r.deck.splice(0,4));
+      r.botHand = r.deck.splice(0,4);
+      r.dealNumber++;
+      r.isLastHand = r.deck.length===0;
+    } else {
+      endRound();
+      return 'round-ended';
+    }
+  }
+  r.turn = r.turn==='player' ? 'bot' : 'player';
+  return 'continue';
+}
+
+/* ============================================================
+   امتیازشماری پایان دور
+   ============================================================ */
+function scoreRound(){
+  const r = G.r;
+  const youName = settings.playerName || 'شما';
+  const botName = getBotDisplayName() || 'ربات';
+  // leftover table cards to last capturer
+  if(r.table.length>0 && r.lastCapturer){
+    const coll = r.lastCapturer==='player'?r.playerCollected:r.botCollected;
+    coll.push(...r.table);
+    r.table = [];
+  }
+  const res = {player:0, bot:0, detail:[]};
+  const clubs = {player:r.playerCollected.filter(c=>c.s==='♣').length, bot:r.botCollected.filter(c=>c.s==='♣').length};
+  if(clubs.player>clubs.bot){ res.player+=7; res.detail.push(['خاج بیشتر ('+youName+')','+۷ برای '+youName]); }
+  else if(clubs.bot>clubs.player){ res.bot+=7; res.detail.push(['خاج بیشتر ('+botName+')','+۷ برای '+botName]); }
+
+  const aces = {player:r.playerCollected.filter(c=>c.r==='A').length, bot:r.botCollected.filter(c=>c.r==='A').length};
+  res.player += aces.player; res.bot += aces.bot;
+  if(aces.player) res.detail.push(['آس‌های '+youName+' ('+fa(aces.player)+')', '+'+fa(aces.player)]);
+  if(aces.bot) res.detail.push(['آس‌های '+botName+' ('+fa(aces.bot)+')', '+'+fa(aces.bot)]);
+
+  const jacks = {player:r.playerCollected.filter(c=>c.r==='J').length, bot:r.botCollected.filter(c=>c.r==='J').length};
+  res.player += jacks.player; res.bot += jacks.bot;
+  if(jacks.player) res.detail.push(['سرباز‌های '+youName+' ('+fa(jacks.player)+')', '+'+fa(jacks.player)]);
+  if(jacks.bot) res.detail.push(['سرباز‌های '+botName+' ('+fa(jacks.bot)+')', '+'+fa(jacks.bot)]);
+
+  if(r.playerCollected.some(c=>c.r==='10'&&c.s==='♦')){ res.player+=3; res.detail.push(['۱۰ خشت ('+youName+')','+۳']); }
+  if(r.botCollected.some(c=>c.r==='10'&&c.s==='♦')){ res.bot+=3; res.detail.push(['۱۰ خشت ('+botName+')','+۳']); }
+
+  if(r.playerCollected.some(c=>c.r==='2'&&c.s==='♣')){ res.player+=2; res.detail.push(['۲ گیشنیز ('+youName+')','+۲']); }
+  if(r.botCollected.some(c=>c.r==='2'&&c.s==='♣')){ res.bot+=2; res.detail.push(['۲ گیشنیز ('+botName+')','+۲']); }
+
+  if(r.playerSur){ res.player += r.playerSur*5; res.detail.push(['سور '+youName+' ('+fa(r.playerSur)+')','+'+fa(r.playerSur*5)]); }
+  if(r.botSur){ res.bot += r.botSur*5; res.detail.push(['سور '+botName+' ('+fa(r.botSur)+')','+'+fa(r.botSur*5)]); }
+
+  return res;
+}
+
+function endRound(){
+  const res = scoreRound();
+  G.playerTotal += res.player;
+  G.botTotal += res.bot;
+  persist();
+  showRoundSummary(res);
+}
+
+function startNextRound(){
+  G.round++;
+  G.dealerIsPlayer = !G.dealerIsPlayer;
+  G.r = freshRoundState(G.dealerIsPlayer);
+  persist();
+  renderGame();
+  maybeBotTurn();
+}
+
+/* ============================================================
+   هوش مصنوعی ربات
+   ============================================================ */
+function aiChooseMove(){
+  const r = G.r;
+  const allOptions = [];
+  r.botHand.forEach(c=>{
+    legalMovesForCard(c, r.table).forEach(m=>allOptions.push({card:c, move:m}));
+  });
+
+  const diff = settings.difficulty;
+
+  if(diff==='beginner'){
+    // Mostly random; slight bias to occasionally miss captures like a true beginner
+    const captures = allOptions.filter(o=>o.move.type!=='place');
+    if(captures.length && Math.random()<0.5){
+      return captures[Math.floor(Math.random()*captures.length)];
+    }
+    return allOptions[Math.floor(Math.random()*allOptions.length)];
+  }
+
+  if(diff==='easy'){
+    const captures = allOptions.filter(o=>o.move.type!=='place');
+    if(captures.length){
+      return captures[Math.floor(Math.random()*captures.length)];
+    }
+    const places = allOptions.filter(o=>o.move.type==='place');
+    return places[Math.floor(Math.random()*places.length)];
+  }
+
+  // shared evaluation for normal/hard/impossible
+  function evalOption(o){
+    let v = 0;
+    if(o.move.type!=='place'){
+      v += setValue(o.move.cards) + setValue([o.card]);
+      const wouldBeSur = (r.table.length - o.move.cards.length)===0 && o.move.type!=='jack';
+      if(wouldBeSur) v += 5;
+    } else {
+      // placing: penalize giving away dangerous cards, reward dumping low-value safe cards
+      v -= cardPoints(o.card)*1.4;
+      // penalize if this exact card would let opponent capture on their very next turn
+    }
+    return v;
+  }
+
+  function opponentBestResponse(simTable, simPlayerHand){
+    // best value the human could get on the resulting table, approximated using their current known hand
+    let best = 0;
+    simPlayerHand.forEach(c=>{
+      legalMovesForCard(c, simTable).forEach(m=>{
+        if(m.type!=='place'){
+          let v = setValue(m.cards)+setValue([c]);
+          const wouldBeSur = (simTable.length - m.cards.length)===0 && m.type!=='jack';
+          if(wouldBeSur) v+=5;
+          if(v>best) best=v;
+        }
+      });
+    });
+    return best;
+  }
+
+  if(diff==='normal'){
+    let best=null, bestScore=-Infinity;
+    allOptions.forEach(o=>{
+      const s = evalOption(o) + Math.random()*0.15;
+      if(s>bestScore){ bestScore=s; best=o; }
+    });
+    return best;
+  }
+
+  if(diff==='hard' || diff==='impossible'){
+    let best=null, bestScore=-Infinity;
+    allOptions.forEach(o=>{
+      let simTable;
+      if(o.move.type==='place') simTable = r.table.concat([o.card]);
+      else {
+        const ids = new Set(o.move.cards.map(c=>c.id));
+        simTable = r.table.filter(c=>!ids.has(c.id));
+      }
+      const myVal = evalOption(o);
+      const oppVal = opponentBestResponse(simTable, r.playerHand);
+      let s = myVal - oppVal*(diff==='impossible'?1.15:0.85);
+      if(diff==='impossible'){
+        // slight extra foresight: prefer moves keeping own hand flexible (more distinct future targets)
+        s += Math.random()*0.05;
+      } else {
+        s += Math.random()*0.2;
+      }
+      if(s>bestScore){ bestScore=s; best=o; }
+    });
+    return best;
+  }
+
+  return allOptions[0];
+}
+
+function maybeBotTurn(){
+  if(!G || G.finished) return;
+  const r = G.r;
+  if(r.turn!=='bot') return;
+  // در بازی دو نفره، جای «ربات» را یک بازیکن واقعی گرفته؛ منتظر پیام شبکه او می‌مانیم
+  if(mpActive() && MP.role==='host') return;
+  if(mpActive() && MP.role==='joiner') return; // نوبت حریف است؛ فقط منتظر می‌مانیم
+  animLock = true;
+  setTimeout(()=>{
+    const choice = aiChooseMove();
+    doPlay('bot', choice.card, choice.move.cards, choice.move.type);
+  }, 550 + Math.random()*500);
+}
+
+/* ============================================================
+   اجرای حرکت و رندر صفحه
+   ============================================================ */
+/* ============================================================
+   انیمیشن پرواز کارت (بازی‌کردن روی زمین / برداشتن به عرشه)
+   با کپی‌کردن یک المان شناور روی موقعیت واقعی کارت و جابه‌جایی نرم آن
+   ============================================================ */
+function rectOf(sel){
+  const el = document.querySelector(sel);
+  return el ? el.getBoundingClientRect() : null;
+}
+function flyClone(innerHtml, fromRect, toRect, opts){
+  opts = opts||{};
+  try{
+    if(!fromRect || !toRect) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'flying';
+    wrap.innerHTML = innerHtml;
+    wrap.style.left = fromRect.left+'px';
+    wrap.style.top = fromRect.top+'px';
+    wrap.style.width = fromRect.width+'px';
+    wrap.style.height = fromRect.height+'px';
+    wrap.style.opacity = '1';
+    document.body.appendChild(wrap);
+    // یک فریم صبر می‌کنیم تا مرورگر موقعیت اولیه را ثبت کند، سپس به مقصد جابه‌جا می‌کنیم
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        if(opts.shrink){
+          const cx = toRect.left + toRect.width/2 - 8;
+          const cy = toRect.top + toRect.height/2 - 11;
+          wrap.style.left = cx+'px'; wrap.style.top = cy+'px';
+          wrap.style.width='16px'; wrap.style.height='22px';
+          wrap.style.opacity='0.15';
+        } else {
+          wrap.style.left = toRect.left+'px'; wrap.style.top = toRect.top+'px';
+          wrap.style.width = toRect.width+'px'; wrap.style.height = toRect.height+'px';
+        }
+      });
+    });
+    setTimeout(()=>{ wrap.remove(); if(typeof opts.onDone==='function') opts.onDone(); }, 520);
+  }catch(e){ console.error('خطای انیمیشن پرواز کارت (بی‌اهمیت، نادیده گرفته شد):', e); }
+}
+
+function doPlay(who, card, moveCards, type){
+  // پیش از اعمال حرکت، موقعیت فعلی کارت‌های درگیر را برای انیمیشن ذخیره می‌کنیم
+  const preHandRect = who==='player'
+    ? rectOf('#player-hand .card[data-id="'+card.id+'"]')
+    : rectOf('#bot-hand');
+  const preTableRects = (moveCards||[]).map(c=>({id:c.id, rect:rectOf('#table-area .card[data-id="'+c.id+'"]')}));
+
+  const result = applyMove(who, card, moveCards, type, {});
+  renderGame();
+
+  // اجرای انیمیشن پرواز پس از رندر جدید (در صورت روشن بودن در تنظیمات)
+  try{
+    if(settings.animationsEnabled){
+    if(type==='place'){
+      const targetEl = document.querySelector('#table-area .card[data-id="'+card.id+'"]');
+      if(targetEl && preHandRect){
+        const toRect = targetEl.getBoundingClientRect();
+        targetEl.classList.add('anim-hidden');
+        flyClone(cardHtml(card,true), preHandRect, toRect, {onDone:()=>targetEl.classList.remove('anim-hidden')});
+      }
+    } else {
+      const badgeSel = who==='player' ? '#player-collected-count' : '#bot-collected-count';
+      const badgeRect = rectOf(badgeSel);
+      if(badgeRect){
+        if(preHandRect) flyClone(cardHtml(card,true), preHandRect, badgeRect, {shrink:true});
+        preTableRects.forEach(item=>{
+          if(item.rect){
+            const c = moveCards.find(m=>m.id===item.id) || card;
+            flyClone(cardHtml(c,true), item.rect, badgeRect, {shrink:true});
+          }
+        });
+      }
+      const pileBadge = document.querySelector(badgeSel);
+      if(pileBadge){
+        pileBadge.classList.add('capture-pulse');
+        setTimeout(()=>pileBadge.classList.remove('capture-pulse'), 350);
+      }
+    }
+    }
+  }catch(e){ console.error('خطای انیمیشن (بی‌اهمیت):', e); }
+
+  if(result.surHappened==='sur'){
+    showToast((who==='player'?settings.playerName:getBotDisplayName())+' سور زد! +۵ امتیاز');
+  } else if(result.surHappened==='cancel'){
+    showToast('سور برگشت! امتیاز سور حریف خنثی شد');
+  } else if(result.surHappened==='blocked'){
+    showToast('سور در این مرحله مجاز نیست');
+  } else if(type==='jack'){
+    showToast('جارو با سرباز!');
+  }
+
+  playSfx(type==='place' ? 'place' : 'capture');
+  if(who==='player') vibrate(type==='place' ? 12 : 25);
+
+  const advance = afterMoveAdvance();
+  persist();
+  renderGame();
+  animLock = false;
+  // اگر میزبان بازی دو نفره هستیم، وضعیت جدید را برای بازیکن دوم می‌فرستیم
+  if(mpActive() && MP.role==='host'){
+    if(advance==='round-ended'){ mpBroadcastRoundEnd(); return; }
+    mpBroadcastState();
+  }
+  if(advance==='round-ended') return;
+  maybeBotTurn();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=>t.classList.remove('show'), 1600);
+}
+
+/* ---------- render ---------- */
+// حرف انگلیسی خال، برای تطبیق با اسم فایل تصاویر داخل پوشه‌ی cards/ (مثل 5C.png برای پنج خشت... نه، پنج گشنیز)
+function suitFileLetter(s){
+  return s==='♠' ? 'S' : s==='♥' ? 'H' : s==='♦' ? 'D' : 'C';
+}
+/* اگر پوشه‌ی cards/ کنار index.html با فایل‌هایی مثل 5C.png، AH.png، 10D.png، KS.png و back.png
+   وجود داشته باشد، همان تصویر واقعی کارت نمایش داده می‌شود. اگر فایل موجود نباشد (یا هنوز
+   آپلود نشده)، با onerror همان تصویر پنهان می‌شود و ظاهر پیش‌فرض قبلی (متن/خال طراحی‌شده)
+   دقیقاً مثل قبل نمایش داده می‌شود؛ یعنی هیچ باگی در ظاهر ایجاد نمی‌شود. */
+function cardHtml(c, faceUp){
+  if(!faceUp){
+    // اگر کاربر از تنظیمات یک تصویر پشت دلخواه آپلود کرده، همان اولویت دارد و سراغ فایل مخزن نمی‌رویم
+    const backImgTag = settings.cardBackImage ? '' : '<img class="card-face-img" src="cards/back.png" alt="" onerror="this.remove()">';
+    return '<div class="card back">'+backImgTag+'</div>';
+  }
+  const red = RED_SUITS.includes(c.s);
+  const label = faLabel(c.r);
+  const imgPath = 'cards/'+c.r+suitFileLetter(c.s)+'.png';
+  return '<div class="card '+(red?'red':'')+(isFace(c.r)?' face':'')+'" data-id="'+c.id+'">'+
+    '<img class="card-face-img" src="'+imgPath+'" alt="" onerror="this.remove()">'+
+    '<div class="corner tl">'+label+'<span>'+c.s+'</span></div>'+
+    '<div class="center">'+(isFace(c.r)? (c.r==='J'?'سرباز':c.r==='Q'?'بی‌بی':'شاه') : c.s)+'</div>'+
+    '<div class="corner br">'+label+'<span>'+c.s+'</span></div>'+
+  '</div>';
+}
+
+function renderGame(){
+  if(!G) return;
+  const r = G.r;
+  document.getElementById('hud-bot-name').textContent = getBotDisplayName();
+  document.getElementById('hud-player-name').textContent = settings.playerName;
+  document.getElementById('hud-bot-score').textContent = fa(G.botTotal);
+  document.getElementById('hud-player-score').textContent = fa(G.playerTotal);
+  document.getElementById('hud-round').textContent = fa(G.round);
+  document.getElementById('hud-dealnum').textContent = fa(r.dealNumber);
+  document.getElementById('hud-bot').classList.toggle('active', r.turn==='bot');
+  document.getElementById('hud-player').classList.toggle('active', r.turn==='player');
+
+  document.getElementById('bot-hand').innerHTML = r.botHand.map(()=>cardHtml(null,false)).join('');
+
+  const tableArea = document.getElementById('table-area');
+  const hint = document.getElementById('table-empty-hint');
+  hint.style.display = r.table.length===0 ? 'block' : 'none';
+  const deckHtml = document.getElementById('deckpile').outerHTML;
+  tableArea.innerHTML = deckHtml + '<div class="table-empty-hint" id="table-empty-hint" style="display:'+(r.table.length===0?'block':'none')+'">زمین خالی است</div>' +
+    r.table.map(c=>{
+      const el = cardHtml(c, true);
+      return el.replace('class="card', 'class="card'+(selectedTableIds.has(c.id)?' selected':''));
+    }).join('');
+  document.getElementById('deck-count').textContent = fa(r.deck.length);
+
+  document.getElementById('bot-collected-count').textContent = fa(r.botCollected.length);
+  document.getElementById('player-collected-count').textContent = fa(r.playerCollected.length);
+
+  const surTotal = r.playerSur + r.botSur;
+  const surEl = document.getElementById('sur-indicator');
+  if(surTotal>0){ surEl.style.display='flex'; surEl.textContent = 'سور: شما '+fa(r.playerSur)+' — ربات '+fa(r.botSur); }
+  else surEl.style.display='none';
+
+  document.getElementById('player-hand').innerHTML = r.playerHand.map(c=>{
+    const el = cardHtml(c, true);
+    const isNew = !prevPlayerHandIds.has(c.id);
+    let cls = (selectedHandCard&&selectedHandCard.id===c.id?' selected':'') + (isNew?' deal-in':'');
+    return el.replace('class="card', 'class="card'+cls);
+  }).join('');
+  prevPlayerHandIds = new Set(r.playerHand.map(c=>c.id));
+
+  // bind events
+  document.getElementById('player-hand').querySelectorAll('.card').forEach(el=>{
+    el.addEventListener('click', onHandCardClick);
+    bindLongPressPlace(el);
+  });
+  tableArea.querySelectorAll('.card').forEach(el=>{
+    el.addEventListener('click', onTableCardClick);
+  });
+
+  const selHint = document.getElementById('selection-hint');
+  if(selectedHandCard){
+    selHint.textContent = 'کارت‌های زمین موردنظر را لمس کن (با تکمیل ترکیب درست، خودکار بازی می‌شود) — برای گذاشتن ساده، کارت را کمی نگه‌دار — برای انصراف، دوباره لمسش کن';
+  } else {
+    selHint.textContent = '';
+  }
+}
+
+/* نگه‌داشتن کارت انتخاب‌شده (در حالت چندگزینه‌ای) به‌جای برداشتن، آن را ساده روی زمین می‌گذارد */
+function bindLongPressPlace(el){
+  let timer = null;
+  const start = ()=>{
+    if(!selectedHandCard || el.getAttribute('data-id')!==selectedHandCard.id) return;
+    timer = setTimeout(()=>{
+      const card = selectedHandCard;
+      selectedHandCard = null; selectedTableIds.clear();
+      const isNetworkJoiner = mpActive() && MP.role==='joiner';
+      if(isNetworkJoiner) mpSendMoveIntent(card, [], 'place');
+      else doPlay('player', card, [], 'place');
+    }, 550);
+  };
+  const cancel = ()=>{ if(timer){ clearTimeout(timer); timer=null; } };
+  el.addEventListener('pointerdown', start);
+  el.addEventListener('pointerup', cancel);
+  el.addEventListener('pointerleave', cancel);
+  el.addEventListener('pointercancel', cancel);
+}
+
+function currentSelectionValid(){
+  if(!selectedHandCard) return false;
+  const r = G.r;
+  const ev = evaluateSelection(selectedHandCard, r.table, selectedTableIds);
+  return ev.valid;
+}
+
+/* با تاچ روی کارت دست، بازی هوشمند انجام می‌شود:
+   - اگر هیچ برداشتی ممکن نباشد، کارت فوراً روی زمین گذاشته می‌شود (یک تاچ = انداختن کارت)
+   - اگر دقیقاً یک راه برداشتن معتبر باشد (مثل سرباز/شاه/بی‌بی که کل مجموعه‌ی مجاز را یک‌جا جارو می‌کنند)،
+     همان فوراً و خودکار انجام می‌شود، بدون نیاز به انتخاب دستی کارت‌های زمین
+   - فقط وقتی چند حالت برداشتِ متفاوت وجود دارد (مثلاً چند ترکیب عددی که جمعشان ۱۱ می‌شود)،
+     حالت انتخاب دستی باز می‌ماند تا کاربر خودش ترکیب موردنظر را انتخاب کند */
+function onHandCardClick(e){
+  if(animLock || G.r.turn!=='player') return;
+  const id = e.currentTarget.getAttribute('data-id');
+  const r = G.r;
+  const card = r.playerHand.find(c=>c.id===id);
+  if(!card) return;
+
+  // اگر همین کارت از قبل در حالت انتخاب دستی است، دوباره تاچ = لغو انتخاب
+  if(selectedHandCard && selectedHandCard.id===id){
+    selectedHandCard=null; selectedTableIds.clear();
+    renderGame();
+    return;
+  }
+
+  const options = legalMovesForCard(card, r.table);
+  const captureOptions = options.filter(o=>o.type!=='place');
+  // در بازی دو نفره، اگر ما بازیکن دوم (joiner) هستیم، حرکت را برای میزبان می‌فرستیم
+  // نه اینکه خودمان مستقیم روی وضعیت بازی اعمال کنیم (میزبان همیشه مرجع اصلی است)
+  const isNetworkJoiner = mpActive() && MP.role==='joiner';
+  const play = (c, mv, t)=> isNetworkJoiner ? mpSendMoveIntent(c, mv, t) : doPlay('player', c, mv, t);
+
+  if(captureOptions.length===0){
+    // هیچ برداشتی ممکن نیست: کارت را مستقیم روی زمین می‌گذاریم
+    selectedHandCard=null; selectedTableIds.clear();
+    play(card, [], 'place');
+    return;
+  }
+  if(captureOptions.length===1){
+    // فقط یک برداشت معتبر وجود دارد: خودکار و فوری انجامش می‌دهیم (شامل جارو با سرباز/شاه/بی‌بی)
+    selectedHandCard=null; selectedTableIds.clear();
+    play(card, captureOptions[0].cards, captureOptions[0].type);
+    return;
+  }
+
+  // چند حالت برداشت متفاوت وجود دارد؛ کاربر باید خودش کارت‌های زمین را انتخاب کند
+  selectedHandCard = card;
+  selectedTableIds.clear();
+  renderGame();
+}
+function onTableCardClick(e){
+  if(animLock || G.r.turn!=='player' || !selectedHandCard) return;
+  const id = e.currentTarget.getAttribute('data-id');
+  if(!id) return;
+  if(selectedTableIds.has(id)) selectedTableIds.delete(id); else selectedTableIds.add(id);
+
+  // به محض اینکه ترکیب انتخاب‌شده معتبر باشد، بدون نیاز به دکمه‌ی تایید، بلافاصله بازی می‌کنیم
+  const r = G.r;
+  const ev = evaluateSelection(selectedHandCard, r.table, selectedTableIds);
+  if(ev.valid && selectedTableIds.size>0){
+    const card = selectedHandCard;
+    const moveCards = ev.cards;
+    const type = ev.type;
+    selectedHandCard = null; selectedTableIds.clear();
+    if(mpActive() && MP.role==='joiner'){ mpSendMoveIntent(card, moveCards, type); }
+    else { doPlay('player', card, moveCards, type); }
+    return;
+  }
+  renderGame();
+}
+
+document.getElementById('btn-quit-game').addEventListener('click', ()=>{
+  if(mpActive()){
+    mpSend({t:'leave'});
+    mpTeardown();
+  }
+  goto('screen-menu');
+});
+
+/* ============================================================
+   نمایش کارت‌های جمع‌شده هر بازیکن (با تاچ روی نشان تعداد کارت)
+   ============================================================ */
+function openCollectedModal(who){
+  if(!G) return;
+  const r = G.r;
+  const list = who==='player' ? r.playerCollected : r.botCollected;
+  const title = who==='player' ? (settings.playerName+' چه کارت‌هایی جمع کرده') : (getBotDisplayName()+' چه کارت‌هایی جمع کرده');
+  document.getElementById('collected-title').textContent = title + ' ('+fa(list.length)+' برگ)';
+  const body = document.getElementById('collected-body');
+  if(list.length===0){
+    body.innerHTML = '<p style="opacity:.6;">هنوز هیچ کارتی جمع نشده است.</p>';
+  } else {
+    body.className = 'collected-grid';
+    body.innerHTML = list.map(c=>cardHtml(c, true)).join('');
+    body.querySelectorAll('.card').forEach(el=>{ el.style.cursor='default'; });
+  }
+  document.getElementById('modal-collected').classList.remove('hidden');
+}
+document.getElementById('badge-player-collected').addEventListener('click', ()=>openCollectedModal('player'));
+document.getElementById('badge-bot-collected').addEventListener('click', ()=>openCollectedModal('bot'));
+document.getElementById('collected-close').addEventListener('click', ()=>{
+  document.getElementById('modal-collected').classList.add('hidden');
+});
+
+/* ============================================================
+   ریست اضطراری بازی (برای وقتی بازی هنگ می‌کند)
+   این دکمه همیشه در دسترس است و به هیچ‌کدام از قفل‌های انیمیشن یا
+   نوبت بازی وابسته نیست، تا کاربر هیچ‌وقت در بازی گیر نکند.
+   ============================================================ */
+document.getElementById('btn-emergency-reset').addEventListener('click', ()=>{
+  document.getElementById('modal-emergency-reset').classList.remove('hidden');
+});
+document.getElementById('er-cancel').addEventListener('click', ()=>{
+  document.getElementById('modal-emergency-reset').classList.add('hidden');
+});
+document.getElementById('er-confirm').addEventListener('click', ()=>{
+  fullEmergencyReset();
+});
+function fullEmergencyReset(){
+  try{
+    if(mpActive()){ mpSend({t:'leave'}); }
+    mpTeardown();
+    // پاک‌کردن کامل تمام قفل‌ها و وضعیت‌های موقت بازی
+    animLock = false;
+    selectedHandCard = null;
+    selectedTableIds.clear();
+    G = null;
+    clearGame();
+    // بستن تمام مودال‌های احتمالی باز روی صفحه
+    document.querySelectorAll('.modal-bg').forEach(m=>m.classList.add('hidden'));
+    document.getElementById('modal-emergency-reset').classList.add('hidden');
+  }catch(e){
+    // حتی اگر خطایی رخ داد، همچنان تلاش می‌کنیم کاربر را به منو برگردانیم
+    console.error('خطا در ریست اضطراری:', e);
+  }finally{
+    refreshContinueButton();
+    goto('screen-menu');
+    showToastGlobal('بازی ریست شد');
+  }
+}
+
+/* ============================================================
+   مودال‌های پایان دور و پایان بازی
+   ============================================================ */
+function showRoundSummary(res){
+  const youName = settings.playerName || 'شما';
+  const botName = getBotDisplayName() || 'ربات';
+  document.getElementById('round-title').textContent = 'پایان دور '+fa(G.round);
+  let html = '';
+  res.detail.forEach(d=>{ html += '<div class="score-row"><span>'+d[0]+'</span><b>'+d[1]+'</b></div>'; });
+  html += '<div class="score-row" style="margin-top:8px; border-bottom:none;"><span>مجموع این دور</span><b>'+youName+' '+fa(res.player)+' — '+botName+' '+fa(res.bot)+'</b></div>';
+  html += '<div class="score-row" style="border-bottom:none;"><span>مجموع کل</span><b>'+youName+' '+fa(G.playerTotal)+' — '+botName+' '+fa(G.botTotal)+'</b></div>';
+  document.getElementById('round-body').innerHTML = html;
+  document.getElementById('modal-round').classList.remove('hidden');
+
+  if(G.playerTotal>=settings.targetScore || G.botTotal>=settings.targetScore){
+    G.finished = true;
+    persist();
+  }
+  // دکمه‌ی «دور بعدی» برای هر دو طرف همیشه نمایش داده می‌شود؛
+  // رفتار دقیقش (میزبان بودن یا بازیکن دوم بودن) در کلیک هندلر مشخص می‌شود
+  document.getElementById('round-continue').disabled = false;
+  document.getElementById('round-continue').textContent = 'دور بعدی';
+}
+document.getElementById('round-continue').addEventListener('click', ()=>{
+  document.getElementById('modal-round').classList.add('hidden');
+  if(G.finished){
+    showGameOver();
+    return;
+  }
+  if(mpActive() && MP.role==='joiner'){
+    // بازیکن دوم مرجع اصلی نیست؛ فقط درخواست شروع دور بعدی را برای میزبان می‌فرستد
+    mpSend({t:'next-round-request'});
+    showToastGlobal('منتظر شروع دور بعدی توسط میزبان…');
+    return;
+  }
+  startNextRound();
+  if(mpActive() && MP.role==='host') mpBroadcastState();
+});
+function showGameOver(){
+  const winner = G.playerTotal>G.botTotal ? settings.playerName : (G.botTotal>G.playerTotal ? getBotDisplayName() : null);
+  document.getElementById('over-title').textContent = winner ? ('برندهٔ بازی: '+winner+' 🎉') : 'بازی مساوی شد!';
+  document.getElementById('over-body').innerHTML =
+    '<div class="score-row" style="border-bottom:none;"><span>'+settings.playerName+'</span><b>'+fa(G.playerTotal)+'</b></div>'+
+    '<div class="score-row" style="border-bottom:none;"><span>'+getBotDisplayName()+'</span><b>'+fa(G.botTotal)+'</b></div>';
+  document.getElementById('modal-gameover').classList.remove('hidden');
+  clearGame();
+  G = null;
+}
+document.getElementById('over-menu').addEventListener('click', ()=>{
+  document.getElementById('modal-gameover').classList.add('hidden');
+  goto('screen-menu');
+  refreshContinueButton();
+});
+
+/* ============================================================
+   ناوبری بین صفحه‌ها
+   ============================================================ */
+function goto(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  // هر بار که به منوی اصلی برمی‌گردیم، وضعیت دکمه‌ی «ادامه بازی» را دوباره بررسی می‌کنیم
+  // (این باگ را رفع می‌کند که بعد از شروع بازی جدید و خروج، دکمه ادامه فعال نمی‌شد)
+  if(id==='screen-menu') refreshContinueButton();
+}
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click', ()=>goto('screen-menu')));
+
+function refreshContinueButton(){
+  const saved = loadGame();
+  document.getElementById('btn-continue').disabled = !(saved && !saved.finished);
+}
+
+document.getElementById('btn-continue').addEventListener('click', ()=>{
+  mpTeardown();
+  const saved = loadGame();
+  if(!saved || saved.finished) return;
+  G = saved;
+  selectedHandCard=null; selectedTableIds.clear();
+  goto('screen-game');
+  renderGame();
+  maybeBotTurn();
+});
+
+/* ============================================================
+   پروفایل کاربر (جدا از تنظیمات، در بالای صفحه اصلی دیده می‌شود)
+   ============================================================ */
+function refreshProfileWidget(){
+  const nameEl = document.getElementById('profile-name-menu');
+  const userEl = document.getElementById('profile-username-menu');
+  const avEl = document.getElementById('profile-avatar-menu');
+  nameEl.textContent = settings.profileSet ? (settings.playerName||'شما') : 'مهمان';
+  userEl.textContent = settings.profileUsername ? ('@'+settings.profileUsername) : 'پروفایل خودت را بساز';
+  if(settings.profileAvatar){
+    avEl.style.backgroundImage = 'url("'+settings.profileAvatar+'")';
+    avEl.textContent = '';
+  } else {
+    avEl.style.backgroundImage = 'none';
+    avEl.textContent = '👤';
+  }
+}
+document.getElementById('btn-open-profile').addEventListener('click', ()=>{
+  document.getElementById('profile-name-input').value = settings.playerName==='شما' ? '' : (settings.playerName||'');
+  document.getElementById('profile-username-input').value = settings.profileUsername||'';
+  document.getElementById('profile-name-error').style.display = 'none';
+  const avEdit = document.getElementById('profile-avatar-edit');
+  // هر بار که صفحه پروفایل باز می‌شود، هر تغییر ذخیره‌نشده‌ی قبلی آواتار پاک می‌شود
+  // تا یک عکس لغوشده/بازگشت‌داده‌شده به‌اشتباه دوباره ذخیره نشود
+  delete avEdit.dataset.pending;
+  if(settings.profileAvatar){ avEdit.style.backgroundImage = 'url("'+settings.profileAvatar+'")'; avEdit.textContent=''; }
+  else { avEdit.style.backgroundImage = 'none'; avEdit.textContent='👤'; }
+  refreshGoogleSignedInUI();
+  goto('screen-profile');
+});
+document.getElementById('set-profile-avatar-file').addEventListener('change', (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')){ showToastGlobal('لطفاً یک فایل تصویر انتخاب کنید'); return; }
+  const reader = new FileReader();
+  reader.onerror = ()=> showToastGlobal('خواندن تصویر با خطا مواجه شد');
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onerror = ()=> showToastGlobal('این فایل قابل نمایش به‌عنوان تصویر نیست');
+    img.onload = ()=>{
+      try{
+        const size = 240;
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx2d = canvas.getContext('2d');
+        const scale = Math.max(size/img.width, size/img.height);
+        const dw = img.width*scale, dh = img.height*scale;
+        ctx2d.drawImage(img, (size-dw)/2, (size-dh)/2, dw, dh);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const avEdit = document.getElementById('profile-avatar-edit');
+        avEdit.style.backgroundImage = 'url("'+dataUrl+'")';
+        avEdit.textContent='';
+        avEdit.dataset.pending = dataUrl;
+      }catch(err){
+        console.error(err);
+        showToastGlobal('پردازش تصویر با خطا مواجه شد');
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('btn-profile-avatar-remove').addEventListener('click', ()=>{
+  const avEdit = document.getElementById('profile-avatar-edit');
+  avEdit.style.backgroundImage = 'none';
+  avEdit.textContent = '👤';
+  avEdit.dataset.pending = '';
+});
+document.getElementById('profile-name-input').addEventListener('input', ()=>{
+  document.getElementById('profile-name-error').style.display='none';
+});
+
+/* ============================================================
+   ورود با گوگل (فقط برای پرکردن خودکار پروفایل - یک سیستم امنیتی واقعی نیست)
+   ------------------------------------------------------------
+   برای فعال‌شدن این بخش، باید یک Client ID رایگان از
+   Google Cloud Console بسازید (Credentials → OAuth client ID → Web application)
+   و آدرس دقیق سایت گیت‌هاب‌پیجزتان را به‌عنوان Authorized JavaScript origin
+   ثبت کنید، سپس مقدار زیر را با همان Client ID جایگزین کنید.
+   بدون این کار، دکمه به‌جای خطا فقط یک پیام راهنما نشان می‌دهد.
+   ============================================================ */
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+let googleScriptLoaded = false;
+let googleScriptLoading = false;
+function loadGoogleScript(onReady, onError){
+  if(googleScriptLoaded){ onReady(); return; }
+  if(googleScriptLoading){
+    const check = setInterval(()=>{
+      if(googleScriptLoaded){ clearInterval(check); onReady(); }
+    }, 200);
+    setTimeout(()=>clearInterval(check), 8000);
+    return;
+  }
+  googleScriptLoading = true;
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.async = true;
+  script.onload = ()=>{ googleScriptLoaded = true; googleScriptLoading=false; onReady(); };
+  script.onerror = ()=>{ googleScriptLoading=false; onError && onError(); };
+  document.head.appendChild(script);
+}
+function decodeGoogleCredential(jwt){
+  // فقط برای خواندن اطلاعات نمایشی (اسم/ایمیل/عکس)؛ جایگزین تأیید امنیتی واقعی سمت سرور نیست
+  const parts = (jwt||'').split('.');
+  if(parts.length<2) throw new Error('توکن نامعتبر است');
+  const payload = parts[1].replace(/-/g,'+').replace(/_/g,'/');
+  const json = decodeURIComponent(escape(atob(payload)));
+  return JSON.parse(json);
+}
+function initGoogleSignIn(){
+  const statusEl = document.getElementById('google-signin-status');
+  const holder = document.getElementById('google-signin-btn-holder');
+  if(!statusEl || !holder) return;
+  if(GOOGLE_CLIENT_ID.startsWith('YOUR_')){
+    statusEl.textContent = 'برای فعال‌شدن ورود با گوگل، باید یک Client ID در کد تنظیم شود (به راهنما مراجعه کن)';
+    holder.innerHTML = '';
+    return;
+  }
+  if(!navigator.onLine){
+    statusEl.textContent = 'برای ورود با گوگل به اینترنت وصل شو';
+    holder.innerHTML = '';
+    return;
+  }
+  statusEl.textContent = 'در حال آماده‌سازی…';
+  loadGoogleScript(()=>{
+    try{
+      statusEl.textContent = '';
+      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential });
+      holder.innerHTML = '';
+      window.google.accounts.id.renderButton(holder, { theme:'filled_black', size:'large', shape:'pill', text:'signin_with', locale:'fa' });
+    }catch(e){
+      console.error(e);
+      statusEl.textContent = 'خطا در راه‌اندازی ورود با گوگل';
+    }
+  }, ()=>{
+    statusEl.textContent = 'اتصال به سرویس گوگل ممکن نشد (اینترنت را بررسی کن)';
+  });
+}
+function onGoogleCredential(response){
+  try{
+    const payload = decodeGoogleCredential(response.credential);
+    settings.profileEmail = payload.email || '';
+    if(!settings.profileUsername && payload.email){
+      settings.profileUsername = payload.email.split('@')[0].replace(/[^a-z0-9_.]/gi,'').toLowerCase().slice(0,20);
+    }
+    settings.googleSignedIn = true;
+    if(payload.name){
+      document.getElementById('profile-name-input').value = payload.name.trim().slice(0,12);
+      document.getElementById('profile-name-error').style.display='none';
+    }
+    if(payload.picture){
+      const avEdit = document.getElementById('profile-avatar-edit');
+      avEdit.style.backgroundImage = 'url("'+payload.picture+'")';
+      avEdit.textContent = '';
+      avEdit.dataset.pending = payload.picture;
+    }
+    document.getElementById('profile-username-input').value = settings.profileUsername;
+    saveSettings(settings);
+    refreshGoogleSignedInUI();
+    showToastGlobal('با گوگل وارد شدی؛ برای تکمیل، «ذخیره پروفایل» را بزن');
+  }catch(e){
+    console.error(e);
+    showToastGlobal('ورود با گوگل با خطا مواجه شد');
+  }
+}
+function refreshGoogleSignedInUI(){
+  const box = document.getElementById('google-signed-in-box');
+  const holder = document.getElementById('google-signin-btn-holder');
+  const statusEl = document.getElementById('google-signin-status');
+  if(!box) return;
+  if(settings.googleSignedIn && settings.profileEmail){
+    box.style.display='flex';
+    holder.style.display='none';
+    document.getElementById('google-account-name').textContent = settings.playerName || 'کاربر گوگل';
+    document.getElementById('google-account-email').textContent = settings.profileEmail;
+    document.getElementById('google-account-avatar').style.backgroundImage = settings.profileAvatar ? 'url("'+settings.profileAvatar+'")' : 'none';
+    statusEl.textContent = '';
+  } else {
+    box.style.display='none';
+    holder.style.display='block';
+    initGoogleSignIn();
+  }
+}
+document.getElementById('btn-google-signout').addEventListener('click', ()=>{
+  settings.googleSignedIn = false;
+  settings.profileEmail = '';
+  saveSettings(settings);
+  try{ if(window.google && window.google.accounts && window.google.accounts.id) window.google.accounts.id.disableAutoSelect(); }catch(e){}
+  refreshGoogleSignedInUI();
+  showToastGlobal('از حساب گوگل خارج شدی');
+});
+document.getElementById('btn-save-profile').addEventListener('click', ()=>{
+  const name = (document.getElementById('profile-name-input').value||'').trim().slice(0,12);
+  if(!name){
+    document.getElementById('profile-name-error').style.display='block';
+    document.getElementById('profile-name-input').focus();
+    return;
+  }
+  document.getElementById('profile-name-error').style.display='none';
+  // نام‌کاربری فقط حروف/عدد انگلیسی، خط زیر و نقطه (شبیه یوزرنیم‌های معمول)
+  const username = (document.getElementById('profile-username-input').value||'')
+    .trim().toLowerCase().replace(/[^a-z0-9_.]/g,'').slice(0,20);
+  settings.playerName = name;
+  settings.profileUsername = username;
+  const avEdit = document.getElementById('profile-avatar-edit');
+  if(typeof avEdit.dataset.pending !== 'undefined'){
+    settings.profileAvatar = avEdit.dataset.pending || null;
+  }
+  settings.profileSet = true;
+  try{ saveSettings(settings); }
+  catch(err){ showToastGlobal('حجم عکس زیاد است؛ عکس کوچک‌تری امتحان کنید'); return; }
+  refreshProfileWidget();
+  showToastGlobal('پروفایل ذخیره شد');
+  goto('screen-menu');
+});
+let pendingNameCallback = null;
+function requireProfileName(next){
+  if(settings.profileSet && settings.playerName){ next(); return; }
+  pendingNameCallback = next;
+  document.getElementById('enter-name-input').value = settings.playerName==='شما' ? '' : (settings.playerName||'');
+  document.getElementById('enter-name-error').style.display='none';
+  document.getElementById('modal-enter-name').classList.remove('hidden');
+}
+document.getElementById('enter-name-confirm').addEventListener('click', ()=>{
+  const val = (document.getElementById('enter-name-input').value||'').trim().slice(0,12);
+  if(!val){
+    document.getElementById('enter-name-error').style.display='block';
+    document.getElementById('enter-name-input').focus();
+    return;
+  }
+  document.getElementById('enter-name-error').style.display='none';
+  settings.playerName = val;
+  settings.profileSet = true;
+  saveSettings(settings);
+  refreshProfileWidget();
+  document.getElementById('modal-enter-name').classList.add('hidden');
+  const cb = pendingNameCallback; pendingNameCallback = null;
+  if(cb) cb();
+});
+// با شروع تایپ دوباره، پیام خطا مخفی می‌شود
+document.getElementById('enter-name-input').addEventListener('input', ()=>{
+  document.getElementById('enter-name-error').style.display='none';
+});
+
+document.getElementById('btn-newgame').addEventListener('click', ()=>{
+  mpTeardown();
+  requireProfileName(()=>{
+    const saved = loadGame();
+    if(saved && !saved.finished){
+      document.getElementById('modal-newgame-confirm').classList.remove('hidden');
+    } else {
+      beginNewGame();
+    }
+  });
+});
+document.getElementById('ng-cancel').addEventListener('click', ()=>{
+  document.getElementById('modal-newgame-confirm').classList.add('hidden');
+});
+document.getElementById('ng-confirm').addEventListener('click', ()=>{
+  document.getElementById('modal-newgame-confirm').classList.add('hidden');
+  beginNewGame();
+});
+function beginNewGame(){
+  newGame();
+  selectedHandCard=null; selectedTableIds.clear();
+  goto('screen-game');
+  renderGame();
+  maybeBotTurn();
+}
+
+document.getElementById('btn-help').addEventListener('click', ()=>goto('screen-help'));
+document.getElementById('btn-about').addEventListener('click', ()=>goto('screen-about'));
+document.getElementById('btn-settings').addEventListener('click', ()=>{ openSettingsForm(); goto('screen-settings'); });
+document.getElementById('btn-multiplayer').addEventListener('click', ()=>goto('screen-mp-hub'));
+
+/* ============================================================
+   فرم تنظیمات
+   ============================================================ */
+function openSettingsForm(){
+  document.getElementById('set-playername').value = settings.playerName;
+  document.getElementById('set-botname').value = settings.botName;
+  document.getElementById('set-target').value = settings.targetScore;
+  document.getElementById('set-difficulty').value = settings.difficulty;
+  document.getElementById('set-surlasthand').checked = settings.surLastHand;
+  document.getElementById('set-surlastcard').checked = settings.surLastCard;
+  document.getElementById('set-returnsur').checked = settings.returnSur;
+  document.getElementById('set-soundfx').checked = settings.soundEffects;
+  document.getElementById('set-music').checked = settings.music;
+  document.getElementById('set-haptic').checked = settings.hapticFeedback;
+  document.getElementById('set-animations').checked = settings.animationsEnabled;
+  document.getElementById('set-autosort').checked = settings.autoSortHand;
+  document.getElementById('set-cardback-zoom').value = settings.cardBackZoom;
+  document.getElementById('set-cardback-posx').value = settings.cardBackPosX;
+  document.getElementById('set-cardback-posy').value = settings.cardBackPosY;
+  updateCardbackPreviewUI();
+  document.getElementById('set-cardfront-zoom').value = settings.cardFrontZoom;
+  document.getElementById('set-cardfront-posx').value = settings.cardFrontPosX;
+  document.getElementById('set-cardfront-posy').value = settings.cardFrontPosY;
+  updateCardfrontPreviewUI();
+}
+document.getElementById('btn-save-settings').addEventListener('click', ()=>{
+  settings.playerName = (document.getElementById('set-playername').value||'شما').trim().slice(0,12) || 'شما';
+  if(settings.playerName && settings.playerName!=='شما') settings.profileSet = true;
+  settings.botName = (document.getElementById('set-botname').value||'ربات').trim().slice(0,12) || 'ربات';
+  let target = parseInt(document.getElementById('set-target').value,10);
+  if(isNaN(target) || target<20) target = 100;
+  settings.targetScore = target;
+  settings.difficulty = document.getElementById('set-difficulty').value;
+  settings.surLastHand = document.getElementById('set-surlasthand').checked;
+  settings.surLastCard = document.getElementById('set-surlastcard').checked;
+  settings.returnSur = document.getElementById('set-returnsur').checked;
+  settings.soundEffects = document.getElementById('set-soundfx').checked;
+  const musicWasOn = settings.music;
+  settings.music = document.getElementById('set-music').checked;
+  settings.hapticFeedback = document.getElementById('set-haptic').checked;
+  settings.animationsEnabled = document.getElementById('set-animations').checked;
+  settings.autoSortHand = document.getElementById('set-autosort').checked;
+  settings.cardBackZoom = parseInt(document.getElementById('set-cardback-zoom').value,10) || 100;
+  settings.cardBackPosX = parseInt(document.getElementById('set-cardback-posx').value,10) || 50;
+  settings.cardBackPosY = parseInt(document.getElementById('set-cardback-posy').value,10) || 50;
+  settings.cardFrontZoom = parseInt(document.getElementById('set-cardfront-zoom').value,10) || 100;
+  settings.cardFrontPosX = parseInt(document.getElementById('set-cardfront-posx').value,10) || 50;
+  settings.cardFrontPosY = parseInt(document.getElementById('set-cardfront-posy').value,10) || 50;
+  saveSettings(settings);
+  applyCardBack();
+  applyCardFront();
+  if(settings.music && !musicWasOn) SoundEngine.startMusic();
+  if(!settings.music && musicWasOn) SoundEngine.stopMusic();
+  refreshProfileWidget();
+  showToastGlobal('تنظیمات ذخیره شد');
+  goto('screen-menu');
+});
+
+/* ---------- مدیریت تصویر دلخواه پشت کارت ---------- */
+function applyCardBack(){
+  const root = document.documentElement;
+  if(settings.cardBackImage){
+    root.style.setProperty('--custom-back-image', 'url("'+settings.cardBackImage+'")');
+    root.style.setProperty('--custom-back-size', settings.cardBackZoom+'%');
+    root.style.setProperty('--custom-back-pos', settings.cardBackPosX+'% '+settings.cardBackPosY+'%');
+    document.body.classList.add('custom-back');
+  } else {
+    document.body.classList.remove('custom-back');
+  }
+  applyCardFront();
+}
+function applyCardFront(){
+  const root = document.documentElement;
+  if(settings.cardFrontImage){
+    root.style.setProperty('--custom-front-image', 'url("'+settings.cardFrontImage+'")');
+    root.style.setProperty('--custom-front-size', settings.cardFrontZoom+'%');
+    root.style.setProperty('--custom-front-pos', settings.cardFrontPosX+'% '+settings.cardFrontPosY+'%');
+    document.body.classList.add('custom-front');
+  } else {
+    document.body.classList.remove('custom-front');
+  }
+}
+function updateCardfrontPreviewUI(){
+  const wrap = document.getElementById('cardfront-preview-wrap');
+  wrap.style.display = settings.cardFrontImage ? 'flex' : 'none';
+  const prev = document.getElementById('cardfront-preview');
+  if(settings.cardFrontImage){
+    prev.style.backgroundImage = 'url("'+settings.cardFrontImage+'")';
+    prev.style.backgroundSize = settings.cardFrontZoom+'%';
+    prev.style.backgroundPosition = settings.cardFrontPosX+'% '+settings.cardFrontPosY+'%';
+    prev.style.backgroundColor = 'var(--cream)';
+  }
+}
+document.getElementById('set-cardfront-file').addEventListener('change', (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')){ showToastGlobal('لطفاً یک فایل تصویر انتخاب کنید'); return; }
+  const reader = new FileReader();
+  reader.onerror = ()=> showToastGlobal('خواندن تصویر با خطا مواجه شد');
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onerror = ()=> showToastGlobal('این فایل قابل نمایش به‌عنوان تصویر نیست');
+    img.onload = ()=>{
+      try{
+        const targetW = 400, targetH = 558; // نسبت دقیق ۹۱۷×۱۲۸۰ با حجم منطقی برای ذخیره‌سازی محلی
+        const canvas = document.createElement('canvas');
+        canvas.width = targetW; canvas.height = targetH;
+        const ctx2d = canvas.getContext('2d');
+        const scale = Math.max(targetW/img.width, targetH/img.height);
+        const dw = img.width*scale, dh = img.height*scale;
+        const dx = (targetW-dw)/2, dy = (targetH-dh)/2;
+        ctx2d.drawImage(img, dx, dy, dw, dh);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        settings.cardFrontImage = dataUrl;
+        settings.cardFrontZoom = 100; settings.cardFrontPosX = 50; settings.cardFrontPosY = 50;
+        try{ saveSettings(settings); }
+        catch(err){ showToastGlobal('حجم عکس زیاد است؛ عکس دیگری با حجم کمتر امتحان کنید'); return; }
+        document.getElementById('set-cardfront-zoom').value = 100;
+        document.getElementById('set-cardfront-posx').value = 50;
+        document.getElementById('set-cardfront-posy').value = 50;
+        updateCardfrontPreviewUI();
+        applyCardFront();
+        showToastGlobal('طرح روی کارت‌ها تنظیم شد');
+      }catch(err){
+        console.error(err);
+        showToastGlobal('پردازش تصویر با خطا مواجه شد');
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+['set-cardfront-zoom','set-cardfront-posx','set-cardfront-posy'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    settings.cardFrontZoom = parseInt(document.getElementById('set-cardfront-zoom').value,10)||100;
+    settings.cardFrontPosX = parseInt(document.getElementById('set-cardfront-posx').value,10)||50;
+    settings.cardFrontPosY = parseInt(document.getElementById('set-cardfront-posy').value,10)||50;
+    applyCardFront();
+    updateCardfrontPreviewUI();
+  });
+});
+document.getElementById('btn-cardfront-remove').addEventListener('click', ()=>{
+  settings.cardFrontImage = null;
+  settings.cardFrontZoom = 100; settings.cardFrontPosX = 50; settings.cardFrontPosY = 50;
+  saveSettings(settings);
+  applyCardFront();
+  updateCardfrontPreviewUI();
+  showToastGlobal('طرح پیش‌فرض بازگردانده شد');
+});
+function updateCardbackPreviewUI(){
+  const wrap = document.getElementById('cardback-preview-wrap');
+  wrap.style.display = settings.cardBackImage ? 'flex' : 'none';
+}
+document.getElementById('set-cardback-file').addEventListener('change', (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')){ showToastGlobal('لطفاً یک فایل تصویر انتخاب کنید'); return; }
+  const reader = new FileReader();
+  reader.onerror = ()=> showToastGlobal('خواندن تصویر با خطا مواجه شد');
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onerror = ()=> showToastGlobal('این فایل قابل نمایش به‌عنوان تصویر نیست');
+    img.onload = ()=>{
+      try{
+        // تصویر را روی یک بوم به اندازه‌ی مناسب برای کارت (با کیفیت خوب اما حجم کم) می‌کشیم
+        const targetW = 400, targetH = 558; // نسبت دقیق ۹۱۷×۱۲۸۰ با حجم منطقی برای ذخیره‌سازی محلی
+        const canvas = document.createElement('canvas');
+        canvas.width = targetW; canvas.height = targetH;
+        const ctx2d = canvas.getContext('2d');
+        // برش "cover" تا کل کارت را بدون کش‌آمدگی بپوشاند
+        const scale = Math.max(targetW/img.width, targetH/img.height);
+        const dw = img.width*scale, dh = img.height*scale;
+        const dx = (targetW-dw)/2, dy = (targetH-dh)/2;
+        ctx2d.drawImage(img, dx, dy, dw, dh);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        settings.cardBackImage = dataUrl;
+        settings.cardBackZoom = 100;
+        settings.cardBackPosX = 50;
+        settings.cardBackPosY = 50;
+        try{
+          saveSettings(settings);
+        }catch(err){
+          showToastGlobal('حجم عکس زیاد است؛ عکس دیگری با حجم کمتر امتحان کنید');
+          return;
+        }
+        document.getElementById('set-cardback-zoom').value = 100;
+        document.getElementById('set-cardback-posx').value = 50;
+        document.getElementById('set-cardback-posy').value = 50;
+        updateCardbackPreviewUI();
+        applyCardBack();
+        refreshCardbackPreviewSwatch();
+        showToastGlobal('تصویر پشت کارت تنظیم شد');
+      }catch(err){
+        console.error(err);
+        showToastGlobal('پردازش تصویر با خطا مواجه شد');
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+function refreshCardbackPreviewSwatch(){
+  const sw = document.getElementById('cardback-preview');
+  if(!sw) return;
+  sw.classList.add('back');
+}
+['set-cardback-zoom','set-cardback-posx','set-cardback-posy'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    settings.cardBackZoom = parseInt(document.getElementById('set-cardback-zoom').value,10)||100;
+    settings.cardBackPosX = parseInt(document.getElementById('set-cardback-posx').value,10)||50;
+    settings.cardBackPosY = parseInt(document.getElementById('set-cardback-posy').value,10)||50;
+    applyCardBack();
+  });
+});
+document.getElementById('btn-cardback-remove').addEventListener('click', ()=>{
+  settings.cardBackImage = null;
+  settings.cardBackZoom = 100; settings.cardBackPosX = 50; settings.cardBackPosY = 50;
+  saveSettings(settings);
+  applyCardBack();
+  updateCardbackPreviewUI();
+  showToastGlobal('طرح پیش‌فرض بازگردانده شد');
+});
+
+function showToastGlobal(msg){
+  // lightweight toast reused on menu (creates temp element)
+  const d = document.createElement('div');
+  d.className='toast show';
+  d.style.position='fixed'; d.style.top='16%'; d.style.left='50%'; d.style.transform='translateX(-50%)';
+  d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(), 1500);
+}
+
+/* ============================================================
+   بازی دو نفره روی وای‌فای مشترک (بدون سرور، بدون اینترنت واقعی)
+   ------------------------------------------------------------
+   معماری: میزبان (Host) کاملاً «مرجع اصلی» بازی است؛ دقیقاً همان
+   موتور بازی تک‌نفره را اجرا می‌کند (نقش «ربات» را به‌جای هوش
+   مصنوعی، بازیکن دوم واقعی پر می‌کند). هر حرکتِ بازیکن دوم به‌صورت
+   پیام شبکه به میزبان می‌رسد، میزبان اعتبارسنجی و اجرا می‌کند و
+   سپس وضعیت کامل بازی را (با جابه‌جایی نقش‌ها) برای بازیکن دوم
+   می‌فرستد. این یعنی کد بازی تک‌نفره تقریباً بدون تغییر دوباره
+   استفاده می‌شود و احتمال باگ خیلی کمتر می‌شود.
+   ============================================================ */
+const MP = {
+  role: null,      // 'host' یا 'joiner' یا null (حالت تک‌نفره عادی)
+  pc: null,        // RTCPeerConnection
+  channel: null,   // RTCDataChannel
+  connected: false,
+  peerReady: false,
+  peerName: null,  // اسم واقعی حریف که از طریق شبکه دریافت شده (برای نمایش به‌جای نام محلی «ربات»)
+  shortCode: null  // کد ۷ رقمی فعلی (فقط وقتی فایربیس تنظیم شده باشد)
+};
+// اسمی که باید به‌جای حریف نمایش داده شود: در بازی دو نفره، اسم واقعی حریف؛ در غیر این صورت نام محلی تنظیمات
+function getBotDisplayName(){
+  return (mpActive() && MP.peerName) ? MP.peerName : settings.botName;
+}
+
+function mpActive(){ return MP.role==='host' || MP.role==='joiner'; }
+
+/* ---------- تبدیل شیء SDP به یک کد متنی قابل کپی و برعکس ----------
+   کد فقط از حروف بزرگ/کوچک انگلیسی و عدد تشکیل می‌شود (بدون +، /، = یا هر علامت دیگر)
+   تا کپی/پیست‌کردن آن راحت‌تر باشد. توجه: چون این کد شامل اطلاعات
+   واقعی رمزنگاری اتصال (SDP/ICE) است، به‌صورت فنی نمی‌توان طولش را
+   به چند کاراکتر ثابت (مثل ۱۰ حرف) محدود کرد؛ این کار بدون یک سرور
+   واسط ممکن نیست، و ما عمداً از سرور استفاده نکردیم تا کاملاً آفلاین بماند. */
+const B62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+function bytesToBase62(bytes){
+  // یک بایت نگهبان اول اضافه می‌شود تا صفرهای ابتدایی گم نشوند
+  const guarded = new Uint8Array(bytes.length+1);
+  guarded[0]=1; guarded.set(bytes,1);
+  let num = 0n;
+  for(let i=0;i<guarded.length;i++){ num = (num<<8n) + BigInt(guarded[i]); }
+  let out='';
+  const base=62n;
+  while(num>0n){
+    const rem = num % base;
+    out = B62_ALPHABET[Number(rem)] + out;
+    num = num / base;
+  }
+  return out || '0';
+}
+function base62ToBytes(str){
+  let num = 0n;
+  const base=62n;
+  for(const ch of str){
+    const idx = B62_ALPHABET.indexOf(ch);
+    if(idx<0) throw new Error('کد وارد شده شامل کاراکتر نامعتبر است');
+    num = num*base + BigInt(idx);
+  }
+  let bytes=[];
+  while(num>0n){
+    bytes.unshift(Number(num & 0xFFn));
+    num = num >> 8n;
+  }
+  bytes = bytes.slice(1); // حذف بایت نگهبان
+  return new Uint8Array(bytes);
+}
+async function sdpToCode(obj){
+  const json = JSON.stringify(obj);
+  let payload, flag = 0;
+  try{
+    if(window.CompressionStream){
+      const cs = new CompressionStream('gzip');
+      const writer = cs.writable.getWriter();
+      writer.write(new TextEncoder().encode(json));
+      writer.close();
+      payload = new Uint8Array(await new Response(cs.readable).arrayBuffer());
+      flag = 1;
+    }
+  }catch(e){ /* اگر فشرده‌سازی پشتیبانی نشد، حالت خام استفاده می‌شود */ }
+  if(flag===0) payload = new TextEncoder().encode(json);
+  const withFlag = new Uint8Array(payload.length+1);
+  withFlag[0]=flag; withFlag.set(payload,1);
+  return bytesToBase62(withFlag);
+}
+async function codeToSdp(code){
+  code = (code||'').trim();
+  if(!code) throw new Error('کد خالی است');
+  const bytes = base62ToBytes(code);
+  if(bytes.length<1) throw new Error('کد وارد شده معتبر نیست');
+  const flag = bytes[0];
+  const payload = bytes.slice(1);
+  if(flag===1){
+    const ds = new DecompressionStream('gzip');
+    const writer = ds.writable.getWriter();
+    writer.write(payload);
+    writer.close();
+    const outBuf = await new Response(ds.readable).arrayBuffer();
+    return JSON.parse(new TextDecoder().decode(outBuf));
+  }
+  return JSON.parse(new TextDecoder().decode(payload));
+}
+function waitIceComplete(pc){
+  return new Promise(resolve=>{
+    if(pc.iceGatheringState==='complete'){ resolve(); return; }
+    const onchange = ()=>{
+      if(pc.iceGatheringState==='complete'){
+        pc.removeEventListener('icegatheringstatechange', onchange);
+        resolve();
+      }
+    };
+    pc.addEventListener('icegatheringstatechange', onchange);
+    setTimeout(resolve, 4000); // در صورت طولانی‌شدن جمع‌آوری کاندیدها، بعد از ۴ ثانیه ادامه می‌دهیم
+  });
+}
+
+/* ---------- ساخت اتصال جدید (مشترک بین میزبان و بازیکن دوم) ---------- */
+function mpCreatePeer(){
+  const pc = new RTCPeerConnection({ iceServers: [] });
+  pc.oniceconnectionstatechange = ()=>{
+    if(pc.iceConnectionState==='failed' || pc.iceConnectionState==='disconnected'){
+      mpSetStatus('اتصال قطع شد. مطمئن شوید هر دو گوشی روی یک وای‌فای هستند و دوباره تلاش کنید.');
+    }
+  };
+  return pc;
+}
+function mpBindChannel(channel){
+  MP.channel = channel;
+  channel.onopen = ()=>{
+    MP.connected = true;
+    mpSetStatus('اتصال برقرار شد ✔');
+    mpSend({t:'hello', name: settings.playerName || 'بازیکن'});
+    if(MP.role==='host'){
+      document.getElementById('btn-mp-start-game').style.display='block';
+    } else {
+      showToastGlobal('به بازی میزبان متصل شدید. منتظر شروع بازی توسط میزبان بمانید…');
+    }
+  };
+  channel.onclose = ()=>{
+    MP.connected = false;
+    if(mpActive()) showToastGlobal('اتصال با بازیکن دیگر قطع شد. برای بازگشت به منو از دکمه‌ی ♺ بالای صفحه استفاده کن.');
+  };
+  channel.onmessage = (ev)=>{
+    try{
+      const msg = JSON.parse(ev.data);
+      mpHandleMessage(msg);
+    }catch(e){ console.error('پیام شبکه نامعتبر بود:', e); }
+  };
+}
+function mpSend(msg){
+  if(MP.channel && MP.channel.readyState==='open'){
+    try{ MP.channel.send(JSON.stringify(msg)); }catch(e){ console.error('ارسال پیام شبکه ناموفق بود:', e); }
+  }
+}
+function mpSetStatus(text){
+  const elH = document.getElementById('mp-host-status');
+  const elJ = document.getElementById('mp-join-status');
+  if(elH && MP.role==='host') elH.textContent = text;
+  if(elJ && MP.role==='joiner') elJ.textContent = text;
+}
+
+/* ---------- جریان میزبان ---------- */
+/* ============================================================
+   کد اتصال ۷ رقمی (اختیاری - نیاز به یک پایگاه‌داده رایگان Firebase دارد)
+   ------------------------------------------------------------
+   چون گیت‌هاب‌پیجز فقط فایل‌های ثابت را سرو می‌کند و سرور واقعی نیست،
+   برای داشتن کد کوتاه ۷ رقمی باید یک Firebase Realtime Database رایگان
+   بسازید (فقط برای رد و بدل‌کردن کد اتصال استفاده می‌شود، نه داده‌ی بازی):
+   ۱. برو console.firebase.google.com و یک پروژه‌ی رایگان بساز
+   ۲. از منو، «Realtime Database» را بساز (نه Firestore) - در حالت تست
+   ۳. آدرس دیتابیس (چیزی شبیه https://xxxx-default-rtdb.firebaseio.com) را کپی کن
+   ۴. همان آدرس را جای‌گزین مقدار زیر کن
+   بدون این تنظیم، بازی دو نفره همچنان با روش دستی (کد طولانی) کار می‌کند.
+   ============================================================ */
+const FIREBASE_DB_URL = 'YOUR_FIREBASE_DB_URL';
+function firebaseConfigured(){
+  return !!FIREBASE_DB_URL && !FIREBASE_DB_URL.startsWith('YOUR_') && FIREBASE_DB_URL.startsWith('http');
+}
+function genShortCode(){
+  return String(Math.floor(1000000 + Math.random()*9000000)); // یک عدد ۷ رقمی تصادفی
+}
+let mpPollTimer = null;
+function stopMpPoll(){ if(mpPollTimer){ clearInterval(mpPollTimer); mpPollTimer=null; } }
+
+async function mpStartHostFirebase(){
+  const codeEl = document.getElementById('mp-host-shortcode');
+  const statusEl = document.getElementById('mp-host-status-short');
+  codeEl.textContent = '-------';
+  statusEl.textContent = 'در حال ساخت کد…';
+  MP.role = 'host';
+  try{
+    MP.pc = mpCreatePeer();
+    const channel = MP.pc.createDataChannel('game', {ordered:true});
+    mpBindChannel(channel);
+    const offer = await MP.pc.createOffer();
+    await MP.pc.setLocalDescription(offer);
+    await waitIceComplete(MP.pc);
+    const code = genShortCode();
+    MP.shortCode = code;
+    const res = await fetch(FIREBASE_DB_URL+'/sessions/'+code+'.json', {
+      method:'PUT', body: JSON.stringify({ offer: MP.pc.localDescription, ts: Date.now() })
+    });
+    if(!res.ok) throw new Error('ذخیره‌سازی کد روی سرور ناموفق بود');
+    codeEl.textContent = code;
+    statusEl.textContent = 'منتظر اتصال بازیکن دوم…';
+    stopMpPoll();
+    mpPollTimer = setInterval(async ()=>{
+      try{
+        const r = await fetch(FIREBASE_DB_URL+'/sessions/'+code+'/answer.json');
+        const answer = await r.json();
+        if(answer && answer.type){
+          stopMpPoll();
+          await MP.pc.setRemoteDescription(answer);
+          statusEl.textContent = 'در حال اتصال…';
+          fetch(FIREBASE_DB_URL+'/sessions/'+code+'.json', {method:'DELETE'}).catch(()=>{});
+        }
+      }catch(e){ /* تلاش در دور بعدی */ }
+    }, 2000);
+    setTimeout(()=>{
+      if(!MP.connected){ stopMpPoll(); statusEl.textContent = 'زمان اتصال تمام شد. برگرد و دوباره امتحان کن.'; }
+    }, 120000);
+  }catch(e){
+    console.error('خطا در ساخت کد کوتاه:', e);
+    statusEl.textContent = 'خطا در ارتباط با سرور کد. اینترنت را بررسی کن.';
+  }
+}
+async function mpJoinFirebase(){
+  const code = (document.getElementById('mp-join-shortcode-input').value||'').trim();
+  const statusEl = document.getElementById('mp-join-status-short');
+  if(!/^\d{7}$/.test(code)){ showToastGlobal('کد باید دقیقاً ۷ رقم باشد'); return; }
+  if(!window.RTCPeerConnection){ showToastGlobal('مرورگر شما پشتیبانی نمی‌کند'); return; }
+  mpTeardown();
+  MP.role = 'joiner';
+  statusEl.textContent = 'در حال جستجوی کد…';
+  try{
+    const res = await fetch(FIREBASE_DB_URL+'/sessions/'+code+'.json');
+    const data = await res.json();
+    if(!data || !data.offer){ statusEl.textContent = 'این کد پیدا نشد یا منقضی شده؛ از میزبان کد جدید بگیر.'; return; }
+    MP.pc = mpCreatePeer();
+    MP.pc.ondatachannel = (ev)=>{ mpBindChannel(ev.channel); };
+    await MP.pc.setRemoteDescription(data.offer);
+    const answer = await MP.pc.createAnswer();
+    await MP.pc.setLocalDescription(answer);
+    await waitIceComplete(MP.pc);
+    await fetch(FIREBASE_DB_URL+'/sessions/'+code+'/answer.json', {
+      method:'PUT', body: JSON.stringify(MP.pc.localDescription)
+    });
+    statusEl.textContent = 'در حال اتصال به میزبان…';
+    setTimeout(()=>{
+      if(!MP.connected){ statusEl.textContent = 'هنوز وصل نشدی. مطمئن شو هر دو روی یک وای‌فای هستید.'; }
+    }, 15000);
+  }catch(e){
+    console.error(e);
+    statusEl.textContent = 'اتصال با خطا مواجه شد. دوباره امتحان کن.';
+  }
+}
+
+async function mpStartHost(){
+  if(!window.RTCPeerConnection){
+    showToastGlobal('مرورگر شما از بازی دو نفره پشتیبانی نمی‌کند');
+    return;
+  }
+  mpTeardown(); // اگر تلاش قبلی نیمه‌کاره مانده، کاملاً پاک می‌شود تا تداخل نکند
+  document.getElementById('mp-host-answer').value = '';
+  document.getElementById('btn-mp-start-game').style.display = 'none';
+  mpSetStatus('در انتظار وارد کردن کد پاسخ…');
+  MP.role = 'host';
+  try{
+    MP.pc = mpCreatePeer();
+    const channel = MP.pc.createDataChannel('game', {ordered:true});
+    mpBindChannel(channel);
+    document.getElementById('mp-host-offer').value = 'در حال ساخت کد… چند لحظه صبر کن';
+    const offer = await MP.pc.createOffer();
+    await MP.pc.setLocalDescription(offer);
+    await waitIceComplete(MP.pc);
+    const code = await sdpToCode(MP.pc.localDescription);
+    document.getElementById('mp-host-offer').value = code;
+  }catch(e){
+    console.error('خطا در ساخت بازی میزبان:', e);
+    document.getElementById('mp-host-offer').value = '';
+    mpSetStatus('ساخت کد با خطا مواجه شد. لطفاً «بازگشت» را بزن و دوباره امتحان کن.');
+  }
+}
+async function mpHostConnect(){
+  if(!MP.pc){ showToastGlobal('اول باید یک بازی میزبانی کنی'); return; }
+  const raw = document.getElementById('mp-host-answer').value;
+  if(!raw.trim()){ showToastGlobal('لطفاً اول کد پاسخ بازیکن دوم را بچسبانید'); return; }
+  try{
+    mpSetStatus('در حال اتصال…');
+    const answer = await codeToSdp(raw);
+    await MP.pc.setRemoteDescription(answer);
+    // اگر تا ۱۵ ثانیه اتصال واقعی برقرار نشد، به کاربر اطلاع می‌دهیم (مثلاً چون روی یک وای‌فای نیستند)
+    setTimeout(()=>{
+      if(MP.role==='host' && !MP.connected){
+        mpSetStatus('اتصال برقرار نشد. مطمئن شو هر دو گوشی روی یک وای‌فای هستند و دوباره امتحان کن.');
+      }
+    }, 15000);
+  }catch(e){
+    console.error(e);
+    mpSetStatus('کد وارد شده معتبر نبود. لطفاً دوباره کد را از بازیکن دوم بگیرید.');
+  }
+}
+
+/* ---------- جریان بازیکن دوم (پیوستن) ---------- */
+async function mpJoinMakeAnswer(){
+  if(!window.RTCPeerConnection){
+    showToastGlobal('مرورگر شما از بازی دو نفره پشتیبانی نمی‌کند');
+    return;
+  }
+  const raw = document.getElementById('mp-join-offer').value;
+  if(!raw.trim()){ showToastGlobal('لطفاً اول کد میزبان را بچسبانید'); return; }
+  mpTeardown(); // پاک‌سازی هر تلاش نیمه‌کاره قبلی
+  document.getElementById('mp-join-step2').style.display = 'none';
+  document.getElementById('mp-join-answer').value = '';
+  MP.role = 'joiner';
+  try{
+    MP.pc = mpCreatePeer();
+    MP.pc.ondatachannel = (ev)=>{ mpBindChannel(ev.channel); };
+    const offer = await codeToSdp(raw);
+    await MP.pc.setRemoteDescription(offer);
+    const answer = await MP.pc.createAnswer();
+    await MP.pc.setLocalDescription(answer);
+    await waitIceComplete(MP.pc);
+    const code = await sdpToCode(MP.pc.localDescription);
+    document.getElementById('mp-join-answer').value = code;
+    document.getElementById('mp-join-step2').style.display='block';
+    mpSetStatus('کد پاسخ را به میزبان بده و منتظر بمان…');
+    setTimeout(()=>{
+      if(MP.role==='joiner' && !MP.connected){
+        mpSetStatus('هنوز وصل نشدی. مطمئن شو میزبان کد پاسخ را وارد کرده و هر دو روی یک وای‌فای هستید.');
+      }
+    }, 15000);
+  }catch(e){
+    console.error(e);
+    showToastGlobal('کد میزبان معتبر نبود، دوباره امتحان کن');
+    mpTeardown();
+  }
+}
+
+/* ---------- تبدیل وضعیت بازی بین دو دیدگاه (جابه‌جایی «شما» و «حریف») ----------
+   وقتی میزبان وضعیت را برای بازیکن دوم می‌فرستد، باید همه‌ی فیلدهای
+   playerXxx و botXxx جابه‌جا شوند تا در گوشیِ بازیکن دوم هم دستِ خودش
+   پایین صفحه و دستِ حریف بالای صفحه (به‌صورت پشت‌کارت) نمایش داده شود. */
+function mirrorRoundState(r){
+  return Object.assign({}, r, {
+    playerHand: r.botHand, botHand: r.playerHand,
+    playerCollected: r.botCollected, botCollected: r.playerCollected,
+    playerSur: r.botSur, botSur: r.playerSur,
+    turn: r.turn==='player' ? 'bot' : (r.turn==='bot' ? 'player' : r.turn),
+    lastCapturer: r.lastCapturer==='player' ? 'bot' : (r.lastCapturer==='bot' ? 'player' : r.lastCapturer),
+    dealerIsPlayer: !r.dealerIsPlayer,
+    pendingSurOwner: r.pendingSurOwner==='player' ? 'bot' : (r.pendingSurOwner==='bot' ? 'player' : r.pendingSurOwner)
+  });
+}
+function mpBroadcastState(){
+  if(!mpActive() || MP.role!=='host' || !G) return;
+  mpSend({ t:'state', r: mirrorRoundState(G.r), playerTotal: G.botTotal, botTotal: G.playerTotal, round: G.round, finished: !!G.finished });
+}
+function mpBroadcastRoundEnd(){
+  if(!mpActive() || MP.role!=='host' || !G) return;
+  mpSend({ t:'round-end', r: mirrorRoundState(G.r), playerTotal: G.botTotal, botTotal: G.playerTotal, round: G.round, finished: !!G.finished });
+}
+function mpApplyIncomingState(msg){
+  if(!G) G = { round:1, playerTotal:0, botTotal:0, finished:false, r:null };
+  G.r = msg.r;
+  G.playerTotal = msg.playerTotal;
+  G.botTotal = msg.botTotal;
+  G.round = msg.round;
+  G.finished = msg.finished;
+  selectedHandCard = null; selectedTableIds.clear();
+  persist();
+  renderGame();
+  animLock = false;
+  // اگر تابلوی امتیاز این طرف هنوز باز بود ولی داده‌ی تازه‌تری از حریف رسید
+  // (مثلاً میزبان زودتر دور بعدی را شروع کرد)، آن را می‌بندیم تا صفحه هماهنگ بماند
+  const roundModal = document.getElementById('modal-round');
+  if(roundModal && !roundModal.classList.contains('hidden')) roundModal.classList.add('hidden');
+}
+
+/* ---------- دریافت پیام‌های شبکه ---------- */
+function mpHandleMessage(msg){
+  if(!msg || !msg.t) return;
+  switch(msg.t){
+    case 'hello':
+      MP.peerName = msg.name || null;
+      if(G) renderGame();
+      break;
+    case 'state':
+      mpApplyIncomingState(msg);
+      break;
+    case 'round-end': {
+      mpApplyIncomingState(msg);
+      const res = scoreRound(); // فقط برای تولید متن نمایشی؛ روی داده تغییری اعمال نمی‌کند چون میز از قبل خالی است
+      showRoundSummary(res);
+      break;
+    }
+    case 'move-intent':
+      // فقط میزبان این پیام را دریافت می‌کند: حرکت پیشنهادی بازیکن دوم
+      if(MP.role==='host') mpHostReceiveMove(msg);
+      break;
+    case 'start-game':
+      // فقط بازیکن دوم این را دریافت می‌کند
+      goto('screen-game');
+      showToastGlobal('بازی شروع شد!');
+      break;
+    case 'leave':
+      showToastGlobal('بازیکن دیگر از بازی خارج شد');
+      mpTeardown();
+      goto('screen-menu');
+      break;
+    case 'next-round-request':
+      // فقط میزبان این را دریافت می‌کند: بازیکن دوم دکمه‌ی «دور بعدی» را زده است
+      if(MP.role!=='host' || !G) return;
+      document.getElementById('modal-round').classList.add('hidden');
+      if(G.finished){
+        // بازی کاملاً تمام شده؛ هر دو طرف صفحه‌ی پایان بازی خودشان را می‌بینند
+        showGameOver();
+        return;
+      }
+      startNextRound();
+      mpBroadcastState();
+      break;
+  }
+}
+
+/* ---------- وقتی بازیکن دوم (joiner) کارتی بازی می‌کند ----------
+   به‌جای اجرای مستقیم، فقط درخواست را برای میزبان می‌فرستد و منتظر
+   وضعیت به‌روزشده می‌ماند تا از عدم‌هماهنگی (desync) جلوگیری شود. */
+function mpSendMoveIntent(card, moveCards, type){
+  animLock = true;
+  mpSend({ t:'move-intent', cardId: card.id, moveIds:(moveCards||[]).map(c=>c.id), type });
+}
+function mpHostReceiveMove(msg){
+  if(!G || G.r.turn!=='bot') return; // نوبت بازیکن دوم نیست؛ پیام نادیده گرفته می‌شود
+  const r = G.r;
+  const card = r.botHand.find(c=>c.id===msg.cardId);
+  if(!card) return;
+  const options = legalMovesForCard(card, r.table);
+  let chosen = options.find(o=>o.type==='place' && msg.type==='place');
+  if(msg.type!=='place'){
+    chosen = options.find(o=> o.type===msg.type && o.cards.length===msg.moveIds.length && o.cards.every(c=>msg.moveIds.includes(c.id)) );
+  }
+  if(!chosen){
+    // حرکت نامعتبر یا ناسازگار بود (مثلاً به‌دلیل تأخیر شبکه)؛ برای جلوگیری از گیرکردن بازی، وضعیت فعلی دوباره فرستاده می‌شود
+    mpBroadcastState();
+    return;
+  }
+  doPlay('bot', card, chosen.cards, chosen.type);
+}
+
+/* ---------- ترک بازی دو نفره و بازگشت به حالت عادی ---------- */
+function mpTeardown(){
+  stopMpPoll();
+  if(MP.shortCode && firebaseConfigured()){
+    fetch(FIREBASE_DB_URL+'/sessions/'+MP.shortCode+'.json', {method:'DELETE'}).catch(()=>{});
+  }
+  try{ if(MP.channel) MP.channel.close(); }catch(e){}
+  try{ if(MP.pc) MP.pc.close(); }catch(e){}
+  MP.role = null; MP.pc = null; MP.channel = null; MP.connected = false; MP.peerName = null; MP.shortCode = null;
+}
+
+/* ---------- اتصال دکمه‌های رابط کاربری ---------- */
+document.getElementById('btn-mp-host').addEventListener('click', ()=>{
+  requireProfileName(()=>{
+    goto('screen-mp-host');
+    const useShort = firebaseConfigured();
+    document.getElementById('mp-host-shortcode-box').style.display = useShort ? 'block' : 'none';
+    document.getElementById('mp-host-manual-box').style.display = useShort ? 'none' : 'block';
+    document.getElementById('btn-mp-start-game').style.display = 'none';
+    if(useShort) mpStartHostFirebase(); else mpStartHost();
+  });
+});
+document.getElementById('btn-mp-join').addEventListener('click', ()=>{
+  requireProfileName(()=>{
+    goto('screen-mp-join');
+    const useShort = firebaseConfigured();
+    document.getElementById('mp-join-shortcode-box').style.display = useShort ? 'block' : 'none';
+    document.getElementById('mp-join-manual-box').style.display = useShort ? 'none' : 'block';
+    document.getElementById('mp-join-shortcode-input').value = '';
+    document.getElementById('mp-join-status-short').textContent = '';
+  });
+});
+document.getElementById('btn-mp-copy-shortcode').addEventListener('click', ()=>{
+  const code = document.getElementById('mp-host-shortcode').textContent;
+  if(!code || code.includes('-')) return;
+  navigator.clipboard && navigator.clipboard.writeText(code).then(()=>showToastGlobal('کد کپی شد')).catch(()=>{});
+});
+document.getElementById('btn-mp-join-shortcode').addEventListener('click', mpJoinFirebase);
+document.getElementById('btn-mp-host-back').addEventListener('click', ()=>{ mpTeardown(); goto('screen-mp-hub'); });
+document.getElementById('btn-mp-join-back').addEventListener('click', ()=>{ mpTeardown(); goto('screen-mp-hub'); });
+document.getElementById('btn-mp-copy-offer').addEventListener('click', ()=>{
+  const ta = document.getElementById('mp-host-offer');
+  ta.select();
+  navigator.clipboard && navigator.clipboard.writeText(ta.value).then(()=>showToastGlobal('کد کپی شد')).catch(()=>document.execCommand('copy'));
+});
+document.getElementById('btn-mp-copy-answer').addEventListener('click', ()=>{
+  const ta = document.getElementById('mp-join-answer');
+  ta.select();
+  navigator.clipboard && navigator.clipboard.writeText(ta.value).then(()=>showToastGlobal('کد کپی شد')).catch(()=>document.execCommand('copy'));
+});
+document.getElementById('btn-mp-connect-host').addEventListener('click', mpHostConnect);
+document.getElementById('btn-mp-make-answer').addEventListener('click', mpJoinMakeAnswer);
+document.getElementById('btn-mp-start-game').addEventListener('click', ()=>{
+  if(!MP.connected){ showToastGlobal('هنوز اتصال برقرار نشده است'); return; }
+  beginNewGame(); // میزبان بازی جدید را با همان منطق تک‌نفره شروع می‌کند
+  mpBroadcastState();
+  mpSend({t:'start-game'});
+  goto('screen-game');
+});
+
+
+function init(){
+  refreshContinueButton();
+  applyCardBack();
+  refreshProfileWidget();
+  goto('screen-menu');
+
+  /* تلاش برای قفل‌کردن جهت صفحه روی حالت عمودی، تا با کج‌کردن گوشی نچرخد.
+     نکته: این کار فقط وقتی برنامه به‌صورت نصب‌شده (PWA/standalone) یا در حالت
+     تمام‌صفحه اجرا شود توسط مرورگرها مجاز است؛ در یک تب معمولی مرورگر (خصوصاً
+     سافاری آیفون) قفل‌کردن جهت از طریق وب ممکن نیست و این محدودیت خود مرورگرهاست.
+     به همین دلیل کد داخل try/catch است و اگر پشتیبانی نشود، بی‌سروصدا نادیده گرفته می‌شود. */
+  try{
+    if(screen.orientation && screen.orientation.lock){
+      screen.orientation.lock('portrait').catch(()=>{ /* در تب معمولی مرورگر، این خطا طبیعی است */ });
+    }
+  }catch(e){ /* مرورگرهایی که اصلاً این قابلیت را ندارند */ }
+
+  /* ------------------------------------------------------------
+     سازگاری با تلگرام (Telegram Web App): وقتی بازی از طریق یک بات
+     تلگرام باز شود، این کد ارتفاع واقعی صفحه‌نمایش تلگرام (که در
+     اندروید و iOS با مرورگر معمولی فرق دارد) را می‌گیرد و صفحه را
+     دقیقاً با همان اندازه تنظیم می‌کند. اگر برنامه بیرون از تلگرام یا
+     بدون اینترنت باز شود، این تلاش بی‌خطر نادیده گرفته می‌شود و بازی
+     با همان اندازه‌ی معمول dvh کار می‌کند.
+     ------------------------------------------------------------ */
+  try{
+    const tgScript = document.createElement('script');
+    tgScript.src = 'https://telegram.org/js/telegram-web-app.js';
+    tgScript.async = true;
+    tgScript.onload = ()=>{
+      try{
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if(!tg) return;
+        tg.ready();
+        tg.expand(); // درخواست بیشترین ارتفاع ممکن از تلگرام
+        const applyTgHeight = ()=>{
+          const h = tg.viewportStableHeight || tg.viewportHeight;
+          if(h) document.documentElement.style.setProperty('--tg-vh', h+'px');
+        };
+        applyTgHeight();
+        tg.onEvent('viewportChanged', applyTgHeight);
+        window.addEventListener('resize', applyTgHeight);
+      }catch(e){ console.error('خطای سازگاری با تلگرام (بی‌اهمیت):', e); }
+    };
+    tgScript.onerror = ()=>{ /* بیرون از تلگرام یا بدون اینترنت؛ بازی با ابعاد معمول ادامه می‌دهد */ };
+    document.head.appendChild(tgScript);
+  }catch(e){ /* در صورت هر خطای غیرمنتظره، بی‌سروصدا نادیده گرفته می‌شود */ }
+
+  // مرورگرها اجازه پخش صدا را پیش از اولین تعامل کاربر نمی‌دهند؛
+  // به همین دلیل، با هر لمس/کلیک روی برنامه، تلاش می‌کنیم صدا را فعال و
+  // در صورت روشن‌بودن، موزیک را شروع کنیم. این کار تا وقتی موزیک واقعاً
+  // شروع به پخش نکرده تکرار می‌شود (چون بعضی گوشی‌ها فقط با اولین لمس کافی نیستند)
+  const unlockAudio = ()=>{
+    try{
+      SoundEngine.ensureCtx();
+      if(settings.music) SoundEngine.startMusic();
+      if(SoundEngine.isMusicPlaying()){
+        document.removeEventListener('pointerdown', unlockAudio);
+        document.removeEventListener('click', unlockAudio);
+      }
+    }catch(e){ console.error('خطا در فعال‌سازی صدا:', e); }
+  };
+  document.addEventListener('pointerdown', unlockAudio);
+  document.addEventListener('click', unlockAudio);
+
+  // ثبت سرویس‌ورکر برای اجرای کاملاً آفلاین (در صورت پشتیبانی مرورگر و اجرا از روی HTTPS/localhost)
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', ()=>{
+      navigator.serviceWorker.register('sw.js').then(reg=>{
+        // هر بار که صفحه دوباره دیده می‌شود (مثلاً برگشتن به تب)، بررسی می‌کنیم نسخه‌ی
+        // جدیدتری از سرویس‌ورکر منتشر شده یا نه، تا آپدیت‌های گیت‌هاب زودتر اعمال شوند
+        document.addEventListener('visibilitychange', ()=>{
+          if(document.visibilityState==='visible') reg.update().catch(()=>{});
+        });
+      }).catch(err=>{
+        console.warn('ثبت سرویس‌ورکر ناموفق بود (ممکن است در تلگرام یا حالت فایل محلی پشتیبانی نشود):', err);
+      });
+      // وقتی سرویس‌ورکرِ کنترل‌کننده عوض شود (یعنی نسخه‌ی جدیدی جایگزین شده)،
+      // یک‌بار صفحه را خودکار تازه می‌کنیم تا کاربر بدون کاری اضافه به آخرین نسخه برسد
+      let refreshedOnce = false;
+      navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+        if(refreshedOnce) return;
+        // اگر کاربر وسط یک بازی فعال است، صفحه را رفرش نمی‌کنیم تا بازی قطع نشود؛
+        // نسخه‌ی جدید خودش دفعه‌ی بعد که بازی باز شود اعمال می‌شود
+        const gameScreen = document.getElementById('screen-game');
+        if(gameScreen && !gameScreen.classList.contains('hidden')) return;
+        refreshedOnce = true;
+        window.location.reload();
+      });
+    });
+  }
+}
+init();
+
+})();
+</script>
+</body>
+</html>
